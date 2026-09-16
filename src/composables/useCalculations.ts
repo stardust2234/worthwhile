@@ -81,6 +81,11 @@ export function useCalculations(state: {
       ? 1
       : housingCost.value / sanitizeNumber(state.income.value),
   );
+  const comfortRatio = computed(() =>
+    state.mode.value === "move"
+      ? calculateHousingRatio(state.rent.value, state.income.value)
+      : housingRatio.value,
+  );
   const fullPurchasePrice = computed(() =>
     calculateCashPurchase(state.price.value),
   );
@@ -210,7 +215,11 @@ export function useCalculations(state: {
         ),
   );
   const verdict = computed(() =>
-    (state.mode.value === "safety" ? housingRatio.value : ratio.value) <= 0.3
+    (state.mode.value === "move"
+      ? comfortRatio.value
+      : state.mode.value === "safety"
+        ? housingRatio.value
+        : ratio.value) <= 0.3
       ? "Comfortable"
       : score.value >= 50
         ? "Worth a closer look"
@@ -221,7 +230,9 @@ export function useCalculations(state: {
       Math.ceil(
         (state.mode.value === "purchase"
           ? monthlyPayment.value
-          : monthlyHousing.value) /
+          : state.mode.value === "move"
+            ? state.rent.value
+            : monthlyHousing.value) /
           0.3 /
           100,
       ) * 100,
@@ -242,7 +253,8 @@ export function useCalculations(state: {
           : score.value >= 50
             ? "Safety net is taking shape"
             : "Safety net needs attention"
-        : ratio.value <= 0.3
+        : (state.mode.value === "move" ? comfortRatio.value : ratio.value) <=
+            0.3
           ? "Housing looks manageable"
           : "This plan needs a closer look",
     score: score.value,
@@ -325,9 +337,13 @@ export function useCalculations(state: {
     financeHealth: [
       {
         label: "Housing",
-        ...evaluateGuideline(monthlyHousing.value, state.income.value, {
-          max: 0.3,
-        }),
+        ...evaluateGuideline(
+          state.mode.value === "move" ? state.rent.value : monthlyHousing.value,
+          state.income.value,
+          {
+            max: 0.3,
+          },
+        ),
       },
       {
         label: "Housing + debt",
@@ -381,6 +397,7 @@ export function useCalculations(state: {
 
   return {
     housingRatio,
+    comfortRatio,
     housingCost,
     monthlyPayment,
     interestCost,

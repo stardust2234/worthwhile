@@ -377,9 +377,9 @@ describe("localStorage integration", () => {
       .find((button) => button.text().includes("Moving home"))!
       .trigger("click");
 
-    expect(wrapper.find(".result h2").text()).toBe("This may stretch you");
-    expect(wrapper.find(".result .salary").text()).toContain(
-      "Listed costs currently use 44%",
+    expect(wrapper.find(".result h2").text()).toBe("Comfortable");
+    expect(wrapper.find(".result .rule").text()).toContain(
+      "Your rent stays within 30%",
     );
     await wrapper
       .findAll(".tabs button")
@@ -387,7 +387,7 @@ describe("localStorage integration", () => {
       .trigger("click");
     await wrapper.vm.$nextTick();
     expect(wrapper.find(".results-heading h2").text()).toBe(
-      "This plan needs a closer look",
+      "Housing looks manageable",
     );
     wrapper.unmount();
   });
@@ -513,7 +513,7 @@ describe("localStorage integration", () => {
     wrapper.unmount();
   });
 
-  it("uses listed moving costs for the zero-income minimum", async () => {
+  it("uses rent for the zero-income minimum", async () => {
     const wrapper = mount(App);
     await wrapper
       .findAll(".tabs button")
@@ -524,7 +524,7 @@ describe("localStorage integration", () => {
     await wrapper.find("#monthly-income").setValue("0");
 
     expect(wrapper.find(".result .salary").text()).toContain(
-      "Minimum income for listed costs: £2,000 / month",
+      "Minimum income for rent: £2,000 / month",
     );
     wrapper.unmount();
   });
