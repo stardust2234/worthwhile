@@ -96,6 +96,11 @@ These percentages are product heuristics, not savings-industry requirements.
 The Finance Health panel compares spending with these configurable model
 guidelines:
 
+The 30% housing guideline uses monthly rent alone for moving plans. Purchase
+and safety plans use their recurring monthly housing cost; utilities and other
+listed commitments remain part of the broader cash-flow and affordability
+calculations.
+
 | Category          | Current guideline             |
 | ----------------- | ----------------------------- |
 | Housing           | Up to 30% of take-home income |
