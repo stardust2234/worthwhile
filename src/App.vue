@@ -79,6 +79,7 @@ watch(
 );
 const {
   housingRatio,
+  comfortRatio,
   housingCost,
   monthlyPayment,
   interestCost,
@@ -86,7 +87,6 @@ const {
   moveTotal,
   emergencyTarget,
   cashAvailable,
-  listedMonthlyCosts,
   disposableMargin,
   cashPurchaseMonths,
   cashAmountStillNeeded,
@@ -424,7 +424,7 @@ const selectCalculator = (next: CalculatorMode | "results") => {
                   ? 'Your saving plan is building toward your emergency fund target.'
                   : mode === 'purchase'
                     ? 'Your purchase debt repayments stay within 20% of take-home income.'
-                    : 'Your listed monthly costs leave room for the rest of your life.'
+                    : 'Your rent stays within 30% of take-home income.'
               "
               :warning-title="
                 mode === 'purchase'
@@ -434,8 +434,8 @@ const selectCalculator = (next: CalculatorMode | "results") => {
               :warning="
                 mode === 'purchase' && debtRepaymentRatio > 0.2
                   ? `Debt repayments use ${Math.round(debtRepaymentRatio * 100)}% of take-home income.`
-                  : mode === 'move' && !isWithinComfortRule(ratio)
-                    ? `Minimum income for listed costs: ${fmt(listedMonthlyCosts / 0.3)} / month. Listed costs currently use ${Math.round(ratio * 100)}% of take-home income.`
+                  : mode === 'move' && !isWithinComfortRule(comfortRatio)
+                    ? `Minimum income for rent: ${fmt(rent / 0.3)} / month. Rent currently uses ${Math.round(comfortRatio * 100)}% of take-home income.`
                     : undefined
               "
               @save="savePlan"
