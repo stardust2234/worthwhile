@@ -1,3 +1,121 @@
+.results-page {
+  background: #fff;
+  border: 1px solid #e2eae3;
+  border-radius: 15px;
+  padding: 32px;
+  box-shadow: 0 4px 14px #1b413408;
+}
+
+.results-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e1e9e1;
+  padding-bottom: 25px;
+}
+
+.results-heading h2 {
+  font-size: 28px;
+  color: #46702c;
+}
+
+.results-heading p:not(.eyebrow) {
+  color: #819087;
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+.results-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 24px 0;
+}
+
+.results-cards article {
+  background: #f6f9f5;
+  border-radius: 10px;
+  padding: 18px;
+}
+
+.metric-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.metric-card-heading .eyebrow,
+.results-cards .eyebrow {
+  margin-bottom: 7px;
+}
+
+.help-button {
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: #799084;
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.help-button:hover,
+.help-button:focus-visible {
+  background: #e4f0d5;
+  color: #46702c;
+}
+
+.explainer-panel h2 {
+  margin-top: 4px;
+}
+
+.results-cards h3 {
+  font:
+    700 22px "Space Grotesk",
+    Arial,
+    sans-serif;
+  margin: 0 0 5px;
+}
+
+.results-cards small {
+  font-size: 11px;
+  color: #819087;
+}
+
+.result {
+  background: #fbfdf9;
+}
+
+.result-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.result h2 {
+  font-size: 25px;
+  color: #46702c;
+}
+
+.score {
+  width: 89px;
+  height: 89px;
+  border-radius: 50%;
+  background: conic-gradient(#8bbb4c 0 72%, #e6eee4 72%);
+  display: grid;
+  place-content: center;
+  text-align: center;
+}
+
+.score strong {
+  font:
+    700 27px "Space Grotesk",
+    Arial,
+    sans-serif;
+  display: block;
+}
+
 .score small {
   font-size: 10px;
   color: #8b9b91;
@@ -23,6 +141,39 @@
   line-height: 1.6;
   color: #64766c;
   min-height: 45px;
+}
+
+.score-note {
+  color: #9aaa9f;
+  font-size: 11px;
+  margin: -8px 0 16px;
+}
+
+.salary {
+  display: flex;
+  gap: 10px;
+  background: #fff5e9;
+  color: #ba7942;
+  border-radius: 9px;
+  padding: 13px;
+  margin: 16px 0;
+  font-size: 14px;
+}
+
+.salary b,
+.salary small {
+  display: block;
+}
+
+.salary b {
+  font-size: 12px;
+  color: #684a31;
+}
+
+.salary small {
+  font-size: 11px;
+  color: #9a8069;
+  margin-top: 3px;
 }
 
 .rule {
@@ -79,6 +230,143 @@
   cursor: pointer;
 }
 
+.cash-flow {
+  border-top: 1px solid #e1e9e1;
+  margin-top: 24px;
+  padding-top: 20px;
+}
+
+.cash-flow-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.cash-flow-heading h3,
+.finance-health h3 {
+  font:
+    600 17px "Space Grotesk",
+    Arial,
+    sans-serif;
+  margin: 0;
+}
+
+.cash-flow-heading > strong {
+  font:
+    700 20px "Space Grotesk",
+    Arial,
+    sans-serif;
+}
+
+.cash-row,
+.cash-total {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 12px;
+}
+
+.cash-row {
+  border-bottom: 1px solid #eef2ee;
+  color: #718078;
+}
+
+.cash-row b {
+  color: #172521;
+}
+
+.cash-total {
+  margin-top: 6px;
+  font-weight: 700;
+}
+
+.cash-total b {
+  color: #46702c;
+}
+
+.cash-total.negative b {
+  color: #b35f4d;
+}
+
+.finance-health {
+  margin-top: 24px;
+  border-top: 1px solid #e1e9e1;
+  padding-top: 20px;
+}
+
+.health-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3px 12px;
+  padding: 11px 0;
+  border-bottom: 1px solid #eef2ee;
+  font-size: 12px;
+}
+
+.health-row span {
+  color: #718078;
+}
+
+.health-row strong {
+  color: #172521;
+}
+
+.health-row small {
+  grid-column: 1 / -1;
+  color: #819087;
+  font-size: 11px;
+}
+
+.health-row small.within {
+  color: #5b8235;
+}
+
+.health-row small.above {
+  color: #b35f4d;
+}
+
+.results-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.results-detail-grid .finance-health {
+  margin-top: 24px;
+}
+
+.back-to-calculators {
+  margin-top: 26px;
+  border: 0;
+  background: #173d34;
+  color: #fff;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.results-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.export-pdf {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 26px;
+  border: 1px solid #b7c8b8;
+  background: #fff;
+  color: #315a47;
+  border-radius: 8px;
+  padding: 11px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 footer {
   display: flex;
   justify-content: space-between;
@@ -116,105 +404,66 @@ footer span {
   text-decoration: none;
 }
 
-.clear-data {
-  border: 0;
-  background: transparent;
-  color: #b6d0c1;
-  font: inherit;
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 8px 14px;
-  text-align: left;
-  min-height: 44px;
-  width: 100%;
-}
+@media print {
+  @page {
+    size: A4;
+    margin: 1.5cm;
+  }
 
-@media (max-width: 800px) {
-  .shell {
-    flex-direction: column;
+  html,
+  body {
+    background: #fff;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
   }
-  aside {
-    width: 100%;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    padding: 12px 14px;
-    gap: 8px 12px;
+
+  header,
+  .tabs,
+  footer,
+  .notice,
+  .results-actions,
+  .preferences-overlay {
+    display: none !important;
   }
-  .brand {
-    padding: 0;
-    white-space: nowrap;
-    grid-column: 1 / -1;
-  }
-  nav,
-  .bottom {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin: 0;
-  }
-  .clear-data {
-    width: auto;
-  }
-  nav {
-    min-width: 0;
-  }
-  nav a,
-  .bottom a {
-    padding: 10px 9px;
-    margin: 0;
-    font-size: 12px;
-    white-space: nowrap;
-  }
-  .bottom a:last-child {
-    display: none;
-  }
+
   main {
-    padding: 30px 18px;
+    max-width: none;
+    padding: 0;
   }
-  .grid {
-    grid-template-columns: 1fr;
+
+  .shell {
+    display: block;
+    min-height: 0;
   }
-  h1 {
-    font-size: 35px;
-  }
-  footer {
-    gap: 15px;
-    flex-direction: column;
-  }
-  footer span {
-    margin: 0;
-  }
-  header {
-    gap: 18px;
-    align-items: flex-start;
-  }
-  header > div:last-child {
-    flex-shrink: 0;
-  }
-  .tabs {
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .tabs::-webkit-scrollbar {
-    display: none;
-  }
-  .results-cards,
-  .two {
-    grid-template-columns: 1fr;
-  }
-  .results-heading,
-  .cash-flow-heading {
-    gap: 18px;
-  }
-  .results-actions {
-    flex-direction: column-reverse;
-    align-items: stretch;
-  }
-  .results-actions button {
+
+  .results-page {
     width: 100%;
-    flex: 1 1 100%;
+    box-shadow: none;
+    border: 0;
+    padding: 0;
   }
-  .preferences-panel {
-    max-height: calc(100dvh - 20px);
+
+  .results-cards article,
+  .cash-flow,
+  .finance-health {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .results-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .results-detail-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .results-detail-grid .finance-health {
+    margin-top: 0;
+  }
+
+  .help-button {
+    display: none;
   }
 }

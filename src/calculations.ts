@@ -1,4 +1,4 @@
-export const MAX_FINANCIAL_VALUE = 1_000_000_000;
+const MAX_FINANCIAL_VALUE = 1_000_000_000;
 
 export const sanitizeNumber = (value: number | string): number => {
   const parsed = Number(value);
@@ -102,7 +102,7 @@ export const calculateHousingRatio = (
     : 1;
 export const isWithinComfortRule = (ratio: number): boolean => ratio <= 0.3;
 
-export type Guideline = {
+type Guideline = {
   min?: number;
   max?: number;
 };
@@ -134,7 +134,7 @@ export const evaluateGuideline = (
   };
 };
 
-export type EssentialCostPosition =
+type EssentialCostPosition =
   | "comfortable"
   | "manageable"
   | "constrained"

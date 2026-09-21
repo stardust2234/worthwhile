@@ -71,6 +71,11 @@
   background: #f0f7e9;
 }
 
+header {
+  display: flex;
+  justify-content: space-between;
+}
+
 .eyebrow {
   font-size: 11px;
   letter-spacing: 1.6px;

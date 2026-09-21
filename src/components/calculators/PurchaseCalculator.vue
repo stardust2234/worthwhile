@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { HandCoins } from "lucide-vue-next";
+import NumericField from "../NumericField.vue";
+
 defineProps<{
   purchaseType: "finance" | "cash";
   price: number;
   deposit: number;
   term: number;
   rate: number;
-  cashAvailable: number;
 }>();
+
 const emit = defineEmits<{
   (e: "update:purchaseType", value: "finance" | "cash"): void;
   (
@@ -16,6 +18,7 @@ const emit = defineEmits<{
   ): void;
 }>();
 </script>
+
 <template>
   <div class="heading">
     <div>
@@ -37,36 +40,21 @@ const emit = defineEmits<{
       Pay cash
     </button>
   </div>
-  <label for="purchase-price"
-    >Purchase price<input
-      id="purchase-price"
-      :value="price"
-      type="number"
-      min="0"
-      max="1000000000"
-      @input="
-        emit('update:price', Number(($event.target as HTMLInputElement).value))
-      "
-    />
-    <span>£</span>
-  </label>
+  <NumericField
+    id="purchase-price"
+    label="Purchase price"
+    :value="price"
+    suffix="£"
+    @update:value="emit('update:price', $event)"
+  />
   <div v-if="purchaseType === 'finance'" class="two">
-    <label for="purchase-deposit"
-      >Deposit<input
-        id="purchase-deposit"
-        :value="deposit"
-        type="number"
-        min="0"
-        max="1000000000"
-        @input="
-          emit(
-            'update:deposit',
-            Number(($event.target as HTMLInputElement).value),
-          )
-        "
-      />
-      <span>£</span>
-    </label>
+    <NumericField
+      id="purchase-deposit"
+      label="Deposit"
+      :value="deposit"
+      suffix="£"
+      @update:value="emit('update:deposit', $event)"
+    />
     <label for="purchase-term"
       >Term<select
         id="purchase-term"
@@ -86,18 +74,14 @@ const emit = defineEmits<{
       </select>
     </label>
   </div>
-  <label v-if="purchaseType === 'finance'" for="purchase-rate"
-    >Estimated interest rate<input
-      id="purchase-rate"
-      :value="rate"
-      type="number"
-      min="0"
-      step=".1"
-      max="100"
-      @input="
-        emit('update:rate', Number(($event.target as HTMLInputElement).value))
-      "
-    />
-    <span>%</span>
-  </label>
+  <NumericField
+    v-if="purchaseType === 'finance'"
+    id="purchase-rate"
+    label="Estimated interest rate"
+    :value="rate"
+    :step="0.1"
+    :max="100"
+    suffix="%"
+    @update:value="emit('update:rate', $event)"
+  />
 </template>

@@ -1,8 +1,8 @@
 import { ref } from "vue";
 
 export type CalculatorMode = "purchase" | "move" | "safety";
-export type AppView = "calculators" | "results";
-export type ExtraCost = { id: number; name: string; amount: number };
+type AppView = "calculators" | "results";
+type ExtraCost = { id: number; name: string; amount: number };
 
 export function useFinancialState() {
   return {

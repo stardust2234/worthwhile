@@ -1,201 +1,31 @@
-.cash-flow-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-}
-.cash-flow-heading h3 {
-  font:
-    600 17px "Space Grotesk",
-    Arial,
-    sans-serif;
-  margin: 0;
-}
-.cash-flow-heading > strong {
-  font:
-    700 20px "Space Grotesk",
-    Arial,
-    sans-serif;
-}
-.cash-row,
-.cash-total {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  font-size: 12px;
-}
-.cash-row {
-  border-bottom: 1px solid #eef2ee;
-  color: #718078;
-}
-.cash-row b {
-  color: #172521;
-}
-.cash-total {
-  margin-top: 6px;
-  font-weight: 700;
-}
-.cash-total b {
-  color: #46702c;
-}
-.cash-total.negative b {
-  color: #b35f4d;
-}
-.score-note {
-  color: #9aaa9f;
-  font-size: 11px;
-  margin: -8px 0 16px;
-}
 .field-help {
   display: block;
   color: #9aaa9f;
   font-size: 11px;
   margin: -12px 0 14px;
 }
-.finance-health {
-  margin-top: 24px;
-  border-top: 1px solid #e1e9e1;
-  padding-top: 20px;
+
+.choice {
+  display: flex;
+  background: #f0f5ef;
+  border-radius: 8px;
+  padding: 3px;
+  margin: -5px 0 20px;
 }
-.finance-health h3 {
-  font:
-    600 17px "Space Grotesk",
-    Arial,
-    sans-serif;
-  margin: 0;
-}
-.health-row {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 3px 12px;
-  padding: 11px 0;
-  border-bottom: 1px solid #eef2ee;
-  font-size: 12px;
-}
-.health-row span {
-  color: #718078;
-}
-.health-row strong {
-  color: #172521;
-}
-.health-row small {
-  grid-column: 1 / -1;
-  color: #819087;
-  font-size: 11px;
-}
-.health-row small.within {
-  color: #5b8235;
-}
-.health-row small.above {
-  color: #b35f4d;
-}
-@media print {
-  @page {
-    size: A4;
-    margin: 1.5cm;
-  }
-  html,
-  body {
-    background: #fff;
-    print-color-adjust: exact;
-    -webkit-print-color-adjust: exact;
-  }
-  aside,
-  header,
-  .tabs,
-  footer,
-  .notice,
-  .results-actions,
-  .preferences-overlay {
-    display: none !important;
-  }
-  main {
-    max-width: none;
-    padding: 0;
-  }
-  .shell {
-    display: block;
-    min-height: 0;
-  }
-  .results-page {
-    width: 100%;
-    box-shadow: none;
-    border: 0;
-    padding: 0;
-  }
-  .results-cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .results-cards article,
-  .cash-flow,
-  .finance-health {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-  .results-detail-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
-  }
-  .results-detail-grid .finance-health {
-    margin-top: 0;
-  }
-  .help-button {
-    display: none;
-  }
-}
-.back-to-calculators {
-  margin-top: 26px;
+
+.choice button {
+  flex: 1;
   border: 0;
-  background: #173d34;
-  color: #fff;
-  border-radius: 8px;
-  padding: 12px 16px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.results-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-.export-pdf {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 26px;
-  border: 1px solid #b7c8b8;
-  background: #fff;
-  color: #315a47;
-  border-radius: 8px;
-  padding: 11px 16px;
-  font-weight: 700;
+  background: transparent;
+  padding: 9px;
+  border-radius: 6px;
+  color: #718078;
+  font-weight: 600;
   cursor: pointer;
 }
 
-.result-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.result h2 {
-  font-size: 25px;
-  color: #46702c;
-}
-
-.score {
-  width: 89px;
-  height: 89px;
-  border-radius: 50%;
-  background: conic-gradient(#8bbb4c 0 72%, #e6eee4 72%);
-  display: grid;
-  place-content: center;
-  text-align: center;
-}
-
-.score strong {
-  font:
-    700 27px "Space Grotesk",
-    Arial,
-    sans-serif;
-  display: block;
+.choice .chosen {
+  background: white;
+  color: #173d34;
+  box-shadow: 0 1px 4px #173d3415;
 }
