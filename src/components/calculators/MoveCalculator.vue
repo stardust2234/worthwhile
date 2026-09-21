@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { Home } from "lucide-vue-next";
+import NumericField from "../NumericField.vue";
+
 defineProps<{
   rent: number;
   moving: number;
   furnishings: number;
   utilities: number;
 }>();
+
 const emit = defineEmits<{
   (
     e:
@@ -17,6 +20,7 @@ const emit = defineEmits<{
   ): void;
 }>();
 </script>
+
 <template>
   <div class="heading">
     <div>
@@ -24,67 +28,34 @@ const emit = defineEmits<{
       <p>Plan the upfront and ongoing cost of a new place.</p>
     </div>
   </div>
-  <label for="monthly-rent"
-    >Monthly rent<input
-      id="monthly-rent"
-      :value="rent"
-      type="number"
-      min="0"
-      max="1000000000"
-      @input="
-        emit('update:rent', Number(($event.target as HTMLInputElement).value))
-      "
-    />
-    <span>£</span>
-  </label>
+  <NumericField
+    id="monthly-rent"
+    label="Monthly rent"
+    :value="rent"
+    suffix="£"
+    @update:value="emit('update:rent', $event)"
+  />
   <div class="two">
-    <label for="moving-costs"
-      >Moving costs<input
-        id="moving-costs"
-        :value="moving"
-        type="number"
-        min="0"
-        max="1000000000"
-        @input="
-          emit(
-            'update:moving',
-            Number(($event.target as HTMLInputElement).value),
-          )
-        "
-      />
-      <span>£</span>
-    </label>
-    <label for="furniture-setup"
-      >Furniture &amp; setup<input
-        id="furniture-setup"
-        :value="furnishings"
-        type="number"
-        min="0"
-        max="1000000000"
-        @input="
-          emit(
-            'update:furnishings',
-            Number(($event.target as HTMLInputElement).value),
-          )
-        "
-      />
-      <span>£</span>
-    </label>
-  </div>
-  <label for="monthly-utilities"
-    >Utilities &amp; other monthly costs<input
-      id="monthly-utilities"
-      :value="utilities"
-      type="number"
-      min="0"
-      max="1000000000"
-      @input="
-        emit(
-          'update:utilities',
-          Number(($event.target as HTMLInputElement).value),
-        )
-      "
+    <NumericField
+      id="moving-costs"
+      label="Moving costs"
+      :value="moving"
+      suffix="£"
+      @update:value="emit('update:moving', $event)"
     />
-    <span>£</span>
-  </label>
+    <NumericField
+      id="furniture-setup"
+      label="Furniture & setup"
+      :value="furnishings"
+      suffix="£"
+      @update:value="emit('update:furnishings', $event)"
+    />
+  </div>
+  <NumericField
+    id="monthly-utilities"
+    label="Utilities & other monthly costs"
+    :value="utilities"
+    suffix="£"
+    @update:value="emit('update:utilities', $event)"
+  />
 </template>

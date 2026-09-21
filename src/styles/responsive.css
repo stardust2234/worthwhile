@@ -1,62 +1,117 @@
-@media (max-width: 520px) {
-  aside {
-    padding: 10px 12px;
-  }
-  nav,
-  .bottom {
-    min-width: 0;
-  }
-  .bottom {
-    justify-content: flex-end;
+@media (max-width: 800px) {
+  .shell {
     flex-direction: column;
+  }
+
+  main {
+    padding: 30px 18px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 35px;
+  }
+
+  footer {
+    gap: 15px;
+    flex-direction: column;
+  }
+
+  footer span {
+    margin: 0;
+  }
+
+  header {
+    gap: 18px;
+    align-items: flex-start;
+  }
+
+  header > div:last-child {
+    flex-shrink: 0;
+  }
+
+  .tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .results-cards,
+  .two {
+    grid-template-columns: 1fr;
+  }
+
+  .results-heading,
+  .cash-flow-heading {
+    gap: 18px;
+  }
+
+  .results-actions {
+    flex-direction: column-reverse;
     align-items: stretch;
-    gap: 2px;
   }
-  .bottom .clear-data {
-    align-self: flex-end;
+
+  .results-actions button {
+    width: 100%;
+    flex: 1 1 100%;
   }
-  nav a,
-  .bottom a {
-    padding-inline: 8px;
+
+  .preferences-panel {
+    max-height: calc(100dvh - 20px);
   }
+}
+
+@media (max-width: 520px) {
   main {
     padding: 22px 14px;
   }
+
   h1 {
     font-size: 29px;
     letter-spacing: -1px;
   }
+
   .intro {
     margin-bottom: 25px;
   }
+
   header {
     flex-direction: column;
   }
+
   header > div:last-child {
     width: 100%;
   }
+
   .grid {
     gap: 14px;
   }
+
   .card,
   .results-page {
     padding: 20px 16px;
   }
+
   .results-heading {
     flex-direction: column;
     align-items: flex-start;
   }
+
   .score {
     align-self: flex-end;
   }
+
   .cash-flow-heading {
     align-items: flex-start;
     flex-direction: column;
   }
-  .summary-card {
-    grid-template-columns: 1fr;
-    gap: 5px;
-  }
+
   .results-actions button {
     width: 100%;
   }
@@ -66,25 +121,7 @@
   .shell {
     flex-direction: column;
   }
-  aside {
-    width: 100%;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    padding: 12px 18px;
-    gap: 8px 12px;
-  }
-  .brand {
-    grid-column: 1 / -1;
-    padding: 0;
-  }
-  nav,
-  .bottom {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    margin: 0;
-    min-width: 0;
-  }
+
   .grid {
     grid-template-columns: 1fr;
   }
@@ -94,59 +131,8 @@
   main {
     padding: 32px 34px 22px;
   }
+
   .grid {
     grid-template-columns: 1fr;
   }
-}
-
-.choice {
-  display: flex;
-  background: #f0f5ef;
-  border-radius: 8px;
-  padding: 3px;
-  margin: -5px 0 20px;
-}
-
-.choice button {
-  flex: 1;
-  border: 0;
-  background: transparent;
-  padding: 9px;
-  border-radius: 6px;
-  color: #718078;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.choice .chosen {
-  background: white;
-  color: #173d34;
-  box-shadow: 0 1px 4px #173d3415;
-}
-
-.salary {
-  display: flex;
-  gap: 10px;
-  background: #fff5e9;
-  color: #ba7942;
-  border-radius: 9px;
-  padding: 13px;
-  margin: 16px 0;
-  font-size: 14px;
-}
-
-.salary b,
-.salary small {
-  display: block;
-}
-
-.salary b {
-  font-size: 12px;
-  color: #684a31;
-}
-
-.salary small {
-  font-size: 11px;
-  color: #9a8069;
-  margin-top: 3px;
 }

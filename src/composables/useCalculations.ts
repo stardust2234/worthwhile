@@ -8,14 +8,16 @@ import {
   calculateMonthlyPayment,
   calculateMoveInTotal,
   calculateSuggestedSaving,
-  evaluateGuideline,
   getEssentialCostPosition,
-  isWithinComfortRule,
   sanitizeNumber,
   sanitizeAggregate,
   sanitizeTermMonths,
 } from "../calculations";
 import type { FinancialResults } from "../types/financial";
+import {
+  buildCashFlow,
+  buildFinanceHealth,
+} from "../viewModels/financialResults";
 
 export function useCalculations(state: {
   mode: Ref<"purchase" | "move" | "safety">;
@@ -108,6 +110,7 @@ export function useCalculations(state: {
       sanitizeAggregate(state.essentials.value) -
       extraMonthlyCosts.value,
   );
+  const availableMonthly = computed(() => Math.max(0, disposableMargin.value));
   const disposableMarginPercentage = computed(() =>
     sanitizeNumber(state.income.value) > 0
       ? disposableMargin.value / sanitizeNumber(state.income.value)
@@ -120,6 +123,17 @@ export function useCalculations(state: {
     sanitizeNumber(state.monthlySaving.value) > 0
       ? sanitizeNumber(state.monthlySaving.value)
       : suggestedSaving.value,
+  );
+  const suggestedSavingRate = computed(() =>
+    sanitizeNumber(state.income.value) > 0
+      ? (suggestedSaving.value / sanitizeNumber(state.income.value)) * 100
+      : 0,
+  );
+  const savingIsPossible = computed(() => suggestedSaving.value > 0);
+  const savingIsRealistic = computed(
+    () =>
+      savingIsPossible.value &&
+      effectiveMonthlySaving.value <= availableMonthly.value,
   );
   const cashAmountStillNeeded = computed(() =>
     Math.max(0, fullPurchasePrice.value - cashAvailable.value),
@@ -173,15 +187,6 @@ export function useCalculations(state: {
       state.income.value,
     );
   });
-  const listedMonthlyCosts = computed(
-    () =>
-      monthlyHousing.value +
-      state.monthlyCommitments.value +
-      state.debtPayments.value +
-      state.transport.value +
-      state.food.value +
-      extraMonthlyCosts.value,
-  );
   const debtRepaymentRatio = computed(() =>
     calculateHousingRatio(
       state.debtPayments.value + planMonthlyPayment.value,
@@ -225,19 +230,6 @@ export function useCalculations(state: {
         ? "Worth a closer look"
         : "This may stretch you",
   );
-  const minSalary = computed(
-    () =>
-      Math.ceil(
-        (state.mode.value === "purchase"
-          ? monthlyPayment.value
-          : state.mode.value === "move"
-            ? state.rent.value
-            : monthlyHousing.value) /
-          0.3 /
-          100,
-      ) * 100,
-  );
-
   const formatCurrency = (value: number) =>
     new Intl.NumberFormat("en-GB", {
       style: "currency",
@@ -309,90 +301,34 @@ export function useCalculations(state: {
     )
       .replace(/-/g, " ")
       .replace(/^\w/, (letter) => letter.toUpperCase()),
-    cashFlow: {
-      income: formatCurrency(state.income.value),
-      rent: formatCurrency(state.rent.value),
-      utilities: formatCurrency(state.utilities.value),
-      transport: formatCurrency(state.transport.value),
-      food: formatCurrency(state.food.value),
-      debtPayments: formatCurrency(
-        state.debtPayments.value + planMonthlyPayment.value,
-      ),
-      otherCommitments: formatCurrency(
-        state.monthlyCommitments.value + extraMonthlyCosts.value,
-      ),
-      saving: formatCurrency(plannedMonthlySaving.value),
-      remaining: formatCurrency(
-        state.income.value -
-          monthlyHousing.value -
-          state.transport.value -
-          state.food.value -
-          state.debtPayments.value -
-          state.monthlyCommitments.value -
-          extraMonthlyCosts.value -
-          planMonthlyPayment.value -
-          plannedMonthlySaving.value,
-      ),
-    },
-    financeHealth: [
+    cashFlow: buildCashFlow(
       {
-        label: "Housing",
-        ...evaluateGuideline(
-          state.mode.value === "move" ? state.rent.value : monthlyHousing.value,
-          state.income.value,
-          {
-            max: 0.3,
-          },
-        ),
+        income: state.income.value,
+        rent: state.rent.value,
+        utilities: state.utilities.value,
+        transport: state.transport.value,
+        food: state.food.value,
+        debtPayments: state.debtPayments.value,
+        monthlyHousing: monthlyHousing.value,
+        monthlyCommitments: state.monthlyCommitments.value,
+        extraMonthlyCosts: extraMonthlyCosts.value,
+        planMonthlyPayment: planMonthlyPayment.value,
+        plannedMonthlySaving: plannedMonthlySaving.value,
       },
-      {
-        label: "Housing + debt",
-        ...evaluateGuideline(
-          monthlyHousing.value +
-            planMonthlyPayment.value +
-            state.debtPayments.value,
-          state.income.value,
-          { max: 0.36 },
-        ),
-      },
-      {
-        label: "Transport",
-        ...evaluateGuideline(state.transport.value, state.income.value, {
-          min: 0.1,
-          max: 0.15,
-        }),
-      },
-      {
-        label: "Food",
-        ...evaluateGuideline(state.food.value, state.income.value, {
-          min: 0.1,
-          max: 0.15,
-        }),
-      },
-      {
-        label: "Utilities",
-        ...evaluateGuideline(state.utilities.value, state.income.value, {
-          min: 0.05,
-          max: 0.1,
-        }),
-      },
-      {
-        label: "Savings",
-        ...evaluateGuideline(plannedMonthlySaving.value, state.income.value, {
-          min: 0.1,
-        }),
-      },
-      {
-        label: "Debt repayments",
-        ...evaluateGuideline(
-          state.debtPayments.value + planMonthlyPayment.value,
-          state.income.value,
-          {
-            max: 0.2,
-          },
-        ),
-      },
-    ],
+      formatCurrency,
+    ),
+    financeHealth: buildFinanceHealth({
+      mode: state.mode.value,
+      income: state.income.value,
+      rent: state.rent.value,
+      utilities: state.utilities.value,
+      transport: state.transport.value,
+      food: state.food.value,
+      debtPayments: state.debtPayments.value,
+      monthlyHousing: monthlyHousing.value,
+      planMonthlyPayment: planMonthlyPayment.value,
+      plannedMonthlySaving: plannedMonthlySaving.value,
+    }),
   }));
 
   return {
@@ -405,10 +341,13 @@ export function useCalculations(state: {
     moveTotal,
     emergencyTarget,
     cashAvailable,
-    listedMonthlyCosts,
+    availableMonthly,
     disposableMargin,
-    disposableMarginPercentage,
+    suggestedSaving,
+    suggestedSavingRate,
     effectiveMonthlySaving,
+    savingIsPossible,
+    savingIsRealistic,
     cashPurchaseMonths,
     cashAmountStillNeeded,
     emergencyGap,
@@ -417,9 +356,7 @@ export function useCalculations(state: {
     debtRepaymentRatio,
     score,
     verdict,
-    minSalary,
     formatCurrency,
     results,
-    isWithinComfortRule,
   };
 }

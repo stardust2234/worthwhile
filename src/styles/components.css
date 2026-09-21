@@ -33,7 +33,7 @@
   position: relative;
 }
 
-.inputs label > span {
+.inputs label > .numeric-field-suffix {
   position: absolute;
   right: 40px;
   bottom: 13px;
@@ -75,9 +75,6 @@
   padding: 12px 0;
 }
 
-.result {
-  background: #fbfdf9;
-}
 .extra-cost {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 120px 32px;
@@ -103,14 +100,6 @@
   line-height: 1;
   cursor: pointer;
 }
-.saved-plan {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  color: #638b38;
-  font-size: 12px;
-  margin: 18px 0 0;
-}
 .saving-check {
   margin-top: 18px;
   padding: 12px;
@@ -133,9 +122,6 @@
   font-size: 11px;
   margin-top: 4px;
   color: #819087;
-}
-.saved-plan svg {
-  stroke-width: 2.5;
 }
 .notice {
   position: fixed;
@@ -198,7 +184,7 @@
     Arial,
     sans-serif;
 }
-.preferences-panel label > span {
+.preferences-panel label > .numeric-field-suffix {
   position: absolute;
   right: 14px;
   bottom: 13px;

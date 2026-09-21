@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, toRef } from "vue";
 import { useDialogAccessibility } from "../composables/useDialogAccessibility";
+import NumericField from "./NumericField.vue";
 const emit = defineEmits<{
   (e: "close"): void;
   (e: "save"): void;
@@ -55,133 +56,61 @@ useDialogAccessibility(toRef(props, "open"), dialog, () => emit("close"));
       <p class="preferences-copy">
         Set the figures used across every calculator.
       </p>
-      <label for="preference-income"
-        >Monthly take-home income<input
-          id="preference-income"
-          :value="income"
-          type="number"
-          min="0"
-          max="1000000000"
-          @input="
-            emit(
-              'update:income',
-              Number(($event.target as HTMLInputElement).value),
-            )
-          "
-        /><span>£</span></label
-      ><label for="preference-rent"
-        >Rent<input
-          id="preference-rent"
-          :value="rent"
-          type="number"
-          min="0"
-          max="1000000000"
-          @input="
-            emit(
-              'update:rent',
-              Number(($event.target as HTMLInputElement).value),
-            )
-          "
-        /><span>£</span></label
-      ><label for="preference-utilities"
-        >Utilities<input
-          id="preference-utilities"
-          :value="utilities"
-          type="number"
-          min="0"
-          max="1000000000"
-          @input="
-            emit(
-              'update:utilities',
-              Number(($event.target as HTMLInputElement).value),
-            )
-          "
-        /><span>£</span></label
-      ><label for="preference-debt"
-        >Debt payments<input
-          id="preference-debt"
-          :value="debtPayments"
-          type="number"
-          min="0"
-          max="1000000000"
-          @input="
-            emit(
-              'update:debtPayments',
-              Number(($event.target as HTMLInputElement).value),
-            )
-          "
-        /><span>£</span></label
-      ><label for="preference-transport"
-        >Transport<input
-          id="preference-transport"
-          :value="transport"
-          type="number"
-          min="0"
-          max="1000000000"
-          @input="
-            emit(
-              'update:transport',
-              Number(($event.target as HTMLInputElement).value),
-            )
-          "
-        /><span>£</span></label
-      ><label for="preference-food"
-        >Food<input
-          id="preference-food"
-          :value="food"
-          type="number"
-          min="0"
-          max="1000000000"
-          @input="
-            emit(
-              'update:food',
-              Number(($event.target as HTMLInputElement).value),
-            )
-          "
-        /><span>£</span></label
-      ><label for="preference-saving"
-        >Monthly saving pace<input
-          id="preference-saving"
-          :value="monthlySaving"
-          type="number"
-          min="0"
-          max="1000000000"
-          @input="
-            emit(
-              'update:monthlySaving',
-              Number(($event.target as HTMLInputElement).value),
-            )
-          "
-        /><span>£</span></label
-      ><label for="preference-commitments"
-        >Other commitments<input
-          id="preference-commitments"
-          :value="monthlyCommitments"
-          type="number"
-          min="0"
-          max="1000000000"
-          @input="
-            emit(
-              'update:monthlyCommitments',
-              Number(($event.target as HTMLInputElement).value),
-            )
-          "
-        /><span>£</span></label
-      ><label for="preference-saved"
-        >Already saved<input
-          id="preference-saved"
-          :value="saved"
-          type="number"
-          min="0"
-          max="1000000000"
-          @input="
-            emit(
-              'update:saved',
-              Number(($event.target as HTMLInputElement).value),
-            )
-          "
-        /><span>£</span></label
-      ><button class="save" @click="emit('save')">Save preferences</button>
+      <NumericField
+        id="preference-income"
+        label="Monthly take-home income"
+        :value="income"
+        suffix="£"
+        @update:value="emit('update:income', $event)"
+      /><NumericField
+        id="preference-rent"
+        label="Rent"
+        :value="rent"
+        suffix="£"
+        @update:value="emit('update:rent', $event)"
+      /><NumericField
+        id="preference-utilities"
+        label="Utilities"
+        :value="utilities"
+        suffix="£"
+        @update:value="emit('update:utilities', $event)"
+      /><NumericField
+        id="preference-debt"
+        label="Debt payments"
+        :value="debtPayments"
+        suffix="£"
+        @update:value="emit('update:debtPayments', $event)"
+      /><NumericField
+        id="preference-transport"
+        label="Transport"
+        :value="transport"
+        suffix="£"
+        @update:value="emit('update:transport', $event)"
+      /><NumericField
+        id="preference-food"
+        label="Food"
+        :value="food"
+        suffix="£"
+        @update:value="emit('update:food', $event)"
+      /><NumericField
+        id="preference-saving"
+        label="Monthly saving pace"
+        :value="monthlySaving"
+        suffix="£"
+        @update:value="emit('update:monthlySaving', $event)"
+      /><NumericField
+        id="preference-commitments"
+        label="Other commitments"
+        :value="monthlyCommitments"
+        suffix="£"
+        @update:value="emit('update:monthlyCommitments', $event)"
+      /><NumericField
+        id="preference-saved"
+        label="Already saved"
+        :value="saved"
+        suffix="£"
+        @update:value="emit('update:saved', $event)"
+      /><button class="save" @click="emit('save')">Save preferences</button>
     </section>
   </div>
 </template>
