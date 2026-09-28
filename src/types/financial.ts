@@ -1,3 +1,5 @@
+export type CurrencyFormatter = (value: number) => string;
+
 export type FinancialResults = {
   overallStatus: string;
   score: number;

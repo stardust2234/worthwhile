@@ -134,7 +134,7 @@ export const evaluateGuideline = (
   };
 };
 
-type EssentialCostPosition =
+export type EssentialCostPosition =
   | "comfortable"
   | "manageable"
   | "constrained"

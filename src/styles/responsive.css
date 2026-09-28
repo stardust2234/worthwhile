@@ -4,7 +4,22 @@
   }
 
   main {
-    padding: 30px 18px;
+    padding: var(--space-8) var(--space-4);
+  }
+
+  .top-bar {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .top-nav {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 2px;
+  }
+
+  .top-nav button {
+    flex: 0 0 auto;
   }
 
   .grid {
@@ -16,7 +31,7 @@
   }
 
   footer {
-    gap: 15px;
+    gap: var(--space-4);
     flex-direction: column;
   }
 
@@ -25,12 +40,8 @@
   }
 
   header {
-    gap: 18px;
+    gap: var(--space-4);
     align-items: flex-start;
-  }
-
-  header > div:last-child {
-    flex-shrink: 0;
   }
 
   .tabs {
@@ -49,7 +60,7 @@
 
   .results-heading,
   .cash-flow-heading {
-    gap: 18px;
+    gap: var(--space-4);
   }
 
   .results-actions {
@@ -62,14 +73,19 @@
     flex: 1 1 100%;
   }
 
-  .preferences-panel {
-    max-height: calc(100dvh - 20px);
+  .dialog-panel {
+    max-height: calc(100dvh - var(--space-5));
   }
 }
 
 @media (max-width: 520px) {
   main {
-    padding: 22px 14px;
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .top-bar {
+    top: 10px;
+    margin-bottom: var(--space-6);
   }
 
   h1 {
@@ -78,24 +94,20 @@
   }
 
   .intro {
-    margin-bottom: 25px;
+    margin-bottom: var(--space-6);
   }
 
   header {
     flex-direction: column;
   }
 
-  header > div:last-child {
-    width: 100%;
-  }
-
   .grid {
-    gap: 14px;
+    gap: var(--space-4);
   }
 
   .card,
   .results-page {
-    padding: 20px 16px;
+    padding: var(--space-5) var(--space-4);
   }
 
   .results-heading {
@@ -129,7 +141,7 @@
 
 @media (min-width: 801px) and (max-width: 956px) and (orientation: landscape) {
   main {
-    padding: 32px 34px 22px;
+    padding: var(--space-8) var(--space-8) var(--space-6);
   }
 
   .grid {
