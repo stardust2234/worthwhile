@@ -1,41 +1,41 @@
 .results-page {
-  background: #fff;
-  border: 1px solid #e2eae3;
-  border-radius: 15px;
-  padding: 32px;
-  box-shadow: 0 4px 14px #1b413408;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-surface);
 }
 
 .results-heading {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #e1e9e1;
-  padding-bottom: 25px;
+  border-bottom: 1px solid var(--border-divider);
+  padding-bottom: var(--space-6);
 }
 
 .results-heading h2 {
   font-size: 28px;
-  color: #46702c;
+  color: var(--color-positive);
 }
 
 .results-heading p:not(.eyebrow) {
-  color: #819087;
-  font-size: 13px;
-  margin: 8px 0 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body-small);
+  margin: var(--space-2) 0 0;
 }
 
 .results-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin: 24px 0;
+  gap: var(--space-4);
+  margin: var(--space-6) 0;
 }
 
 .results-cards article {
-  background: #f6f9f5;
-  border-radius: 10px;
-  padding: 18px;
+  background: var(--surface-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
 }
 
 .metric-card-heading {
@@ -46,7 +46,7 @@
 
 .metric-card-heading .eyebrow,
 .results-cards .eyebrow {
-  margin-bottom: 7px;
+  margin-bottom: var(--space-2);
 }
 
 .help-button {
@@ -54,20 +54,20 @@
   place-items: center;
   border: 0;
   background: transparent;
-  color: #799084;
+  color: var(--color-text-muted);
   padding: 6px;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   cursor: pointer;
 }
 
 .help-button:hover,
 .help-button:focus-visible {
-  background: #e4f0d5;
-  color: #46702c;
+  background: var(--surface-positive-strong);
+  color: var(--color-positive);
 }
 
 .explainer-panel h2 {
-  margin-top: 4px;
+  margin-top: var(--space-1);
 }
 
 .results-cards h3 {
@@ -75,16 +75,16 @@
     700 22px "Space Grotesk",
     Arial,
     sans-serif;
-  margin: 0 0 5px;
+  margin: 0 0 var(--space-1);
 }
 
 .results-cards small {
-  font-size: 11px;
-  color: #819087;
+  font-size: var(--font-size-eyebrow);
+  color: var(--color-text-muted);
 }
 
 .result {
-  background: #fbfdf9;
+  background: var(--surface-subtle);
 }
 
 .result-top {
@@ -95,17 +95,12 @@
 
 .result h2 {
   font-size: 25px;
-  color: #46702c;
+  color: var(--color-positive);
 }
 
 .score {
-  width: 89px;
-  height: 89px;
-  border-radius: 50%;
-  background: conic-gradient(#8bbb4c 0 72%, #e6eee4 72%);
-  display: grid;
-  place-content: center;
-  text-align: center;
+  display: block;
+  text-align: right;
 }
 
 .score strong {
@@ -114,50 +109,51 @@
     Arial,
     sans-serif;
   display: block;
+  color: var(--color-text-primary);
 }
 
 .score small {
   font-size: 10px;
-  color: #8b9b91;
+  color: var(--color-text-muted);
 }
 
 .meter {
   height: 7px;
-  background: #e7eee5;
-  border-radius: 9px;
-  margin: 25px 0 16px;
+  background: var(--meter-track);
+  border-radius: var(--radius-md);
+  margin: var(--space-6) 0 var(--space-4);
   overflow: hidden;
 }
 
 .meter div {
   height: 100%;
-  background: #8bbb4c;
-  border-radius: 9px;
+  background: var(--surface-action);
+  border-radius: var(--radius-md);
   transition: width 0.3s;
 }
 
 .copy {
-  font-size: 13px;
+  font-size: var(--font-size-body-small);
   line-height: 1.6;
-  color: #64766c;
+  color: var(--color-text-muted);
   min-height: 45px;
 }
 
 .score-note {
-  color: #9aaa9f;
-  font-size: 11px;
-  margin: -8px 0 16px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-eyebrow);
+  margin: calc(var(--space-2) * -1) 0 var(--space-4);
 }
 
 .salary {
   display: flex;
-  gap: 10px;
-  background: #fff5e9;
-  color: #ba7942;
-  border-radius: 9px;
-  padding: 13px;
-  margin: 16px 0;
-  font-size: 14px;
+  gap: var(--space-3);
+  background: var(--surface-warning);
+  color: var(--color-warning);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  margin: var(--space-4) 0;
+  font-size: var(--font-size-control);
 }
 
 .salary b,
@@ -166,24 +162,24 @@
 }
 
 .salary b {
-  font-size: 12px;
-  color: #684a31;
+  font-size: var(--font-size-caption);
+  color: var(--color-warning);
 }
 
 .salary small {
-  font-size: 11px;
-  color: #9a8069;
+  font-size: var(--font-size-eyebrow);
+  color: var(--color-warning);
   margin-top: 3px;
 }
 
 .rule {
   display: flex;
-  gap: 11px;
-  background: #f0f7e9;
-  padding: 14px;
-  border-radius: 9px;
-  margin: 19px 0;
-  color: #7baa3b;
+  gap: var(--space-3);
+  background: var(--surface-positive);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  margin: var(--space-5) 0;
+  color: var(--color-positive);
 }
 
 .rule b,
@@ -192,48 +188,48 @@
 }
 
 .rule b {
-  font-size: 12px;
-  color: #172521;
+  font-size: var(--font-size-caption);
+  color: var(--color-text-primary);
 }
 
 .rule small {
-  font-size: 11px;
-  color: #789080;
+  font-size: var(--font-size-eyebrow);
+  color: var(--color-text-muted);
   margin-top: 3px;
 }
 
 .breakdown {
-  border-top: 1px solid #e0e9df;
-  padding-top: 12px;
+  border-top: 1px solid var(--border-divider);
+  padding-top: var(--space-3);
 }
 
 .breakdown div {
   display: flex;
   justify-content: space-between;
-  margin: 12px 0;
+  margin: var(--space-3) 0;
   font-size: 12px;
 }
 
 .breakdown span {
-  color: #819087;
+  color: var(--color-text-muted);
 }
 
 .save {
   width: 100%;
-  margin-top: 14px;
+  margin-top: var(--space-4);
   border: 0;
-  border-radius: 8px;
-  padding: 13px;
-  background: #173d34;
-  color: #fff;
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  background: var(--surface-action);
+  color: var(--color-text-inverse);
   font-weight: 700;
   cursor: pointer;
 }
 
 .cash-flow {
-  border-top: 1px solid #e1e9e1;
-  margin-top: 24px;
-  padding-top: 20px;
+  border-top: 1px solid var(--border-divider);
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
 }
 
 .cash-flow-heading {
@@ -262,17 +258,17 @@
 .cash-total {
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
+  padding: var(--space-3) 0;
   font-size: 12px;
 }
 
 .cash-row {
-  border-bottom: 1px solid #eef2ee;
-  color: #718078;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--color-text-muted);
 }
 
 .cash-row b {
-  color: #172521;
+  color: var(--color-text-primary);
 }
 
 .cash-total {
@@ -281,88 +277,88 @@
 }
 
 .cash-total b {
-  color: #46702c;
+  color: var(--color-positive);
 }
 
 .cash-total.negative b {
-  color: #b35f4d;
+  color: var(--color-danger);
 }
 
 .finance-health {
-  margin-top: 24px;
-  border-top: 1px solid #e1e9e1;
-  padding-top: 20px;
+  margin-top: var(--space-6);
+  border-top: 1px solid var(--border-divider);
+  padding-top: var(--space-5);
 }
 
 .health-row {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 3px 12px;
-  padding: 11px 0;
-  border-bottom: 1px solid #eef2ee;
+  gap: 3px var(--space-3);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--border-subtle);
   font-size: 12px;
 }
 
 .health-row span {
-  color: #718078;
+  color: var(--color-text-muted);
 }
 
 .health-row strong {
-  color: #172521;
+  color: var(--color-text-primary);
 }
 
 .health-row small {
   grid-column: 1 / -1;
-  color: #819087;
+  color: var(--color-text-muted);
   font-size: 11px;
 }
 
 .health-row small.within {
-  color: #5b8235;
+  color: var(--color-positive);
 }
 
 .health-row small.above {
-  color: #b35f4d;
+  color: var(--color-danger);
 }
 
 .results-detail-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 24px;
+  gap: var(--space-6);
   align-items: start;
 }
 
 .results-detail-grid .finance-health {
-  margin-top: 24px;
+  margin-top: var(--space-6);
 }
 
 .back-to-calculators {
-  margin-top: 26px;
+  margin-top: var(--space-6);
   border: 0;
-  background: #173d34;
-  color: #fff;
-  border-radius: 8px;
-  padding: 12px 16px;
+  background: var(--surface-action);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
   font-weight: 700;
   cursor: pointer;
 }
 
 .results-actions {
   display: flex;
-  gap: 10px;
+  gap: var(--space-3);
   align-items: center;
 }
 
 .export-pdf {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 26px;
-  border: 1px solid #b7c8b8;
-  background: #fff;
-  color: #315a47;
-  border-radius: 8px;
-  padding: 11px 16px;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-raised);
+  color: var(--color-interactive);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
   font-weight: 700;
   cursor: pointer;
 }
@@ -370,9 +366,9 @@
 footer {
   display: flex;
   justify-content: space-between;
-  color: #9aaa9f;
-  font-size: 11px;
-  margin-top: 24px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-eyebrow);
+  margin-top: var(--space-6);
 }
 
 footer span {
@@ -386,20 +382,20 @@ footer span {
 .footer-links {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3);
 }
 
 .footer-links a {
-  color: #6f8f78;
+  color: var(--color-interactive);
 }
 
 .footer-links .ko-fi-button {
   display: inline-block;
   padding: 7px 11px;
-  border-radius: 6px;
-  background: #72a4f2;
-  color: #10294f;
-  font-size: 11px;
+  border-radius: var(--radius-sm);
+  background: var(--color-external-brand);
+  color: var(--color-external-brand-text);
+  font-size: var(--font-size-eyebrow);
   font-weight: 700;
   text-decoration: none;
 }
@@ -412,17 +408,18 @@ footer span {
 
   html,
   body {
-    background: #fff;
+    background: var(--surface-raised);
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
 
   header,
+  .top-bar,
   .tabs,
   footer,
   .notice,
   .results-actions,
-  .preferences-overlay {
+  .dialog-overlay {
     display: none !important;
   }
 
@@ -456,7 +453,7 @@ footer span {
 
   .results-detail-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px;
+    gap: var(--space-4);
   }
 
   .results-detail-grid .finance-health {

@@ -1,14 +1,16 @@
 import { ref } from "vue";
-
-export type CalculatorMode = "purchase" | "move" | "safety";
-type AppView = "calculators" | "results";
-type ExtraCost = { id: number; name: string; amount: number };
+import type {
+  AppView,
+  CalculatorMode,
+  ExtraCost,
+  PurchaseType,
+} from "../types/plan";
 
 export function useFinancialState() {
   return {
     mode: ref<CalculatorMode>("purchase"),
     view: ref<AppView>("calculators"),
-    purchaseType: ref<"finance" | "cash">("finance"),
+    purchaseType: ref<PurchaseType>("finance"),
     income: ref(4200),
     price: ref(0),
     deposit: ref(0),
@@ -22,7 +24,6 @@ export function useFinancialState() {
     food: ref(0),
     monthlyCommitments: ref(0),
     debtPayments: ref(0),
-    essentials: ref(2200),
     saved: ref(1800),
     monthlySaving: ref(350),
     extraCosts: ref<ExtraCost[]>([]),

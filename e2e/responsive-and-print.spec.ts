@@ -7,7 +7,7 @@ test.describe("responsive and print layouts", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
 
-    await expect(page.locator(".menu-button")).toBeVisible();
+    await expect(page.locator(".top-nav")).toBeVisible();
     await expect(page.getByRole("tab", { name: "Big purchase" })).toBeVisible();
     const columns = await page
       .locator(".grid")
@@ -39,6 +39,8 @@ test.describe("responsive and print layouts", () => {
     await page.emulateMedia({ media: "print" });
 
     await expect(page.locator(".results-actions")).toBeHidden();
+    await expect(page.locator(".top-bar")).toBeHidden();
+    await expect(page.locator(".top-nav")).toBeHidden();
     await expect(page.locator("aside")).toBeHidden();
     await expect(page.locator(".help-button").first()).toBeHidden();
     await expect(page.locator(".results-page")).toBeVisible();

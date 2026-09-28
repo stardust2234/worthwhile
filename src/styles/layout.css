@@ -1,74 +1,62 @@
 .top-bar {
-  position: relative;
+  position: sticky;
+  top: var(--space-4);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-3);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-floating);
+  margin-bottom: var(--space-8);
 }
 .app-brand {
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #173d34;
+  gap: var(--space-2);
+  color: var(--color-text-strong);
   font:
     700 18px "Space Grotesk",
     Arial,
     sans-serif;
-  margin-bottom: 18px;
+  margin-bottom: 0;
 }
 .app-brand span {
   display: grid;
   place-items: center;
   width: 28px;
   height: 28px;
-  border-radius: 8px;
-  background: #c4ed71;
-  color: #173d34;
+  border-radius: var(--radius-md);
+  color: var(--color-text-strong);
 }
-.menu-button {
-  position: absolute;
-  top: 0;
-  right: 0;
+.app-brand img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+.top-nav button {
   border: 0;
   background: transparent;
-  color: #173d34;
-  min-width: 44px;
-  min-height: 44px;
+  color: var(--color-interactive);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
   cursor: pointer;
+  font:
+    600 var(--font-size-caption) "DM Sans",
+    Arial,
+    sans-serif;
 }
-.menu-icon {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  margin: auto;
-  border-radius: 9px;
-  background: transparent;
-  color: #173d34;
-  font-size: 22px;
-  line-height: 1;
-}
-.menu-panel {
-  position: absolute;
-  top: 50px;
-  right: 0;
-  z-index: 3;
-  display: grid;
-  min-width: 180px;
-  padding: 7px;
-  background: #fff;
-  border: 1px solid #e2eae3;
-  border-radius: 10px;
-  box-shadow: 0 8px 25px #173d3420;
-}
-.menu-panel button {
-  border: 0;
-  background: transparent;
-  color: #315a47;
-  text-align: left;
-  padding: 11px 12px;
-  border-radius: 7px;
-  cursor: pointer;
-}
-.menu-panel button:hover,
-.menu-panel button:focus-visible {
-  background: #f0f7e9;
+.top-nav button:hover,
+.top-nav button:focus-visible {
+  background: var(--surface-positive);
 }
 
 header {
@@ -77,11 +65,11 @@ header {
 }
 
 .eyebrow {
-  font-size: 11px;
+  font-size: var(--font-size-eyebrow);
   letter-spacing: 1.6px;
   font-weight: 700;
-  color: #799084;
-  margin: 0 0 12px;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-3);
 }
 
 h1,
@@ -98,45 +86,45 @@ h1 {
 
 h1 em {
   font-style: normal;
-  color: #729b35;
+  color: var(--color-accent);
 }
 
 .intro {
-  color: #718078;
-  margin: 17px 0 39px;
+  color: var(--color-text-muted);
+  margin: var(--space-4) 0 var(--space-10);
 }
 
 .tabs {
   display: flex;
-  gap: 5px;
-  border-bottom: 1px solid #dde5df;
-  margin-bottom: 25px;
+  gap: var(--space-1);
+  border-bottom: 1px solid var(--border-divider);
+  margin-bottom: var(--space-6);
 }
 
 .tabs button {
   border: 0;
   background: transparent;
-  padding: 12px 18px 14px;
-  color: #8a9990;
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  color: var(--color-text-muted);
   font:
-    600 14px "DM Sans",
+    600 var(--font-size-control) "DM Sans",
     Arial,
     sans-serif;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
   flex: 0 0 auto;
-  min-height: 44px;
+  min-height: var(--touch-target);
 }
 
 .tabs .selected {
-  color: #173d34;
-  border-bottom: 3px solid #87b847;
+  color: var(--color-text-strong);
+  border-bottom: 3px solid var(--color-interactive);
 }
 
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 22px;
+  gap: var(--space-6);
 }
