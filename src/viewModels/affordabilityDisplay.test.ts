@@ -11,7 +11,6 @@ const createInput = (
 ): AffordabilityDisplayInput => ({
   mode: "purchase",
   purchaseType: "finance",
-  verdict: "Worth a closer look",
   score: 60,
   emergencyTarget: 6_000,
   emergencyGap: 2_000,
@@ -31,6 +30,11 @@ const createInput = (
   rent: 500,
   income: 2_000,
   comfortRatio: 0.25,
+  affordabilityVerdict: "closer-look",
+  debtRepaymentAboveGuideline: false,
+  rentAboveComfortRule: false,
+  suggestedHousingMaximum: 600,
+  minimumIncomeForRent: 1_666.6666666666667,
   formatCurrency,
   ...overrides,
 });
@@ -59,7 +63,10 @@ describe("buildAffordabilityDisplayState", () => {
 
   it("builds purchase warnings from debt repayment ratio", () => {
     const display = buildAffordabilityDisplayState(
-      createInput({ debtRepaymentRatio: 0.25 }),
+      createInput({
+        debtRepaymentRatio: 0.25,
+        debtRepaymentAboveGuideline: true,
+      }),
     );
 
     expect(display).toMatchObject({
@@ -88,6 +95,8 @@ describe("buildAffordabilityDisplayState", () => {
         mode: "move",
         comfortRatio: 0.35,
         rent: 700,
+        rentAboveComfortRule: true,
+        minimumIncomeForRent: 700 / 0.3,
       }),
     );
 
@@ -99,5 +108,26 @@ describe("buildAffordabilityDisplayState", () => {
       warning:
         "Minimum income for rent: £2333.3333333333335 / month. Rent currently uses 35% of take-home income.",
     });
+  });
+
+  it("uses the domain verdict instead of recalculating thresholds", () => {
+    expect(
+      buildAffordabilityDisplayState(
+        createInput({
+          affordabilityVerdict: "comfortable",
+          ratio: 0.9,
+          score: 0,
+        }),
+      ).title,
+    ).toBe("Comfortable");
+    expect(
+      buildAffordabilityDisplayState(
+        createInput({
+          affordabilityVerdict: "stretching",
+          ratio: 0.1,
+          score: 100,
+        }),
+      ).title,
+    ).toBe("This may stretch you");
   });
 });

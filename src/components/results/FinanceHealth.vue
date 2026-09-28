@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { HelpCircle, X } from "lucide-vue-next";
+import { ref } from "vue";
+import { HelpCircle } from "lucide-vue-next";
 import type { GuidelineStatus } from "../../calculations";
-import { useDialogAccessibility } from "../../composables/useDialogAccessibility";
+import DialogShell from "../DialogShell.vue";
 
 defineProps<{
   indicators: Array<{
@@ -26,14 +26,6 @@ const positionLabel = (position?: string) =>
         .replace(/^\w/, (letter: string) => letter.toUpperCase())
     : undefined;
 const showHelp = ref(false);
-const helpDialog = ref<HTMLElement | null>(null);
-useDialogAccessibility(
-  computed(() => showHelp.value),
-  helpDialog,
-  () => {
-    showHelp.value = false;
-  },
-);
 </script>
 
 <template>
@@ -65,34 +57,23 @@ useDialogAccessibility(
         positionLabel(indicator.position) || statusLabel(indicator.status)
       }}</small>
     </div>
-    <div
-      v-if="showHelp"
-      class="preferences-overlay"
-      role="dialog"
-      aria-modal="true"
+    <DialogShell
+      :open="showHelp"
+      close-label="Close finance health explanation"
       aria-labelledby="finance-health-help-title"
-      @click.self="showHelp = false"
+      panel-class="explainer-panel"
+      @close="showHelp = false"
     >
-      <div ref="helpDialog" class="preferences-panel explainer-panel">
-        <button
-          class="close-preferences"
-          type="button"
-          aria-label="Close finance health explanation"
-          @click="showHelp = false"
-        >
-          <X :size="20" />
-        </button>
-        <p class="eyebrow">FINANCE HEALTH GUIDELINES</p>
-        <h2 id="finance-health-help-title">How thresholds work</h2>
-        <p class="preferences-copy">
-          These comparisons use common budgeting heuristics:
-          <br />Housing up to 30%, <br />Housing plus debt up to 36%, <br />Debt
-          repayments up to 20%, <br />Transport 10-15%, <br />Food 10-15%,
-          <br />Utilities 5-10%, <br />Savings/Investing 10-20%. <br />They are
-          estimates to support planning, not a validated financial assessment or
-          advice.
-        </p>
-      </div>
-    </div>
+      <p class="eyebrow">FINANCE HEALTH GUIDELINES</p>
+      <h2 id="finance-health-help-title">How thresholds work</h2>
+      <p class="dialog-copy">
+        These comparisons use common budgeting heuristics:
+        <br />Housing up to 30%, <br />Housing plus debt up to 36%, <br />Debt
+        repayments up to 20%, <br />Transport 10-15%, <br />Food 10-15%,
+        <br />Utilities 5-10%, <br />Savings/Investing 10-20%. <br />They are
+        estimates to support planning, not a validated financial assessment or
+        advice.
+      </p>
+    </DialogShell>
   </section>
 </template>

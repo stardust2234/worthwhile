@@ -1,8 +1,8 @@
-import { isWithinComfortRule } from "../calculations";
+import type { AffordabilityVerdict } from "../domain/financialResults";
+import type { CurrencyFormatter } from "../types/financial";
 
-export type AffordabilityDisplayMode = "purchase" | "move" | "safety";
-export type PurchaseDisplayType = "finance" | "cash";
-export type CurrencyFormatter = (value: number) => string;
+type AffordabilityDisplayMode = "purchase" | "move" | "safety";
+type PurchaseDisplayType = "finance" | "cash";
 
 export type AffordabilityDisplayState = {
   title: string;
@@ -21,7 +21,6 @@ export type AffordabilityDisplayState = {
 export type AffordabilityDisplayInput = {
   mode: AffordabilityDisplayMode;
   purchaseType: PurchaseDisplayType;
-  verdict: string;
   score: number;
   emergencyTarget: number;
   emergencyGap: number;
@@ -41,6 +40,11 @@ export type AffordabilityDisplayInput = {
   rent: number;
   income: number;
   comfortRatio: number;
+  affordabilityVerdict: AffordabilityVerdict;
+  debtRepaymentAboveGuideline: boolean;
+  rentAboveComfortRule: boolean;
+  suggestedHousingMaximum: number;
+  minimumIncomeForRent: number;
   formatCurrency: CurrencyFormatter;
 };
 
@@ -53,6 +57,11 @@ export const buildAffordabilityDisplayState = (
   const isCashPurchase =
     input.mode === "purchase" && input.purchaseType === "cash";
   const isSafetyPlan = input.mode === "safety";
+  const verdict = {
+    comfortable: "Comfortable",
+    "closer-look": "Worth a closer look",
+    stretching: "This may stretch you",
+  }[input.affordabilityVerdict];
 
   const copy = isSafetyPlan
     ? `Your target is ${input.formatCurrency(input.emergencyTarget)}. You need ${input.formatCurrency(input.emergencyGap)} to reach your goal. ${input.emergencyGap === 0 ? "Your target is reached." : input.emergencyMonths === Infinity ? "Increase your monthly saving pace to calculate a finish date." : `At ${input.formatCurrency(input.effectiveMonthlySaving)} per month, you have ${input.emergencyMonths} month${input.emergencyMonths === 1 ? "" : "s"} to go.`}`
@@ -80,10 +89,10 @@ export const buildAffordabilityDisplayState = (
           : input.emergencyMonths === Infinity
             ? "Not possible"
             : `${(input.emergencyMonths / 12).toFixed(1)} years`
-        : input.formatCurrency(input.income * 0.3);
+        : input.formatCurrency(input.suggestedHousingMaximum);
 
   return {
-    title: isSafetyPlan ? "Preparedness plan" : input.verdict,
+    title: isSafetyPlan ? "Preparedness plan" : verdict,
     score: input.score,
     copy,
     primaryLabel: isSafetyPlan
@@ -125,10 +134,10 @@ export const buildAffordabilityDisplayState = (
         ? "Above the 20% debt repayment threshold"
         : undefined,
     warning:
-      input.mode === "purchase" && input.debtRepaymentRatio > 0.2
+      input.mode === "purchase" && input.debtRepaymentAboveGuideline
         ? `Debt repayments use ${Math.round(input.debtRepaymentRatio * 100)}% of take-home income.`
-        : input.mode === "move" && !isWithinComfortRule(input.comfortRatio)
-          ? `Minimum income for rent: ${input.formatCurrency(input.rent / 0.3)} / month. Rent currently uses ${Math.round(input.comfortRatio * 100)}% of take-home income.`
+        : input.mode === "move" && input.rentAboveComfortRule
+          ? `Minimum income for rent: ${input.formatCurrency(input.minimumIncomeForRent)} / month. Rent currently uses ${Math.round(input.comfortRatio * 100)}% of take-home income.`
           : undefined,
   };
 };

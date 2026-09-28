@@ -1,55 +1,55 @@
 .card {
-  background: #fff;
-  border: 1px solid #e2eae3;
-  border-radius: 15px;
-  padding: 29px;
-  box-shadow: 0 4px 14px #1b413408;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-surface);
 }
 
 .heading {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 26px;
+  margin-bottom: var(--space-6);
 }
 
 .card h2 {
   font-size: 23px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
 }
 .heading p {
-  margin: 8px 0;
-  color: #819087;
-  font-size: 13px;
+  margin: var(--space-2) 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body-small);
 }
 
-.inputs label {
+.form-fields label {
   display: block;
-  color: #6b7d73;
-  font-size: 12px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
   font-weight: 600;
-  margin: 17px 0;
+  margin: var(--space-4) 0;
   position: relative;
 }
 
-.inputs label > .numeric-field-suffix {
+.form-fields label > .numeric-field-suffix {
   position: absolute;
-  right: 40px;
-  bottom: 13px;
-  color: #9aaa9f;
-  font-size: 14px;
+  right: var(--space-10);
+  bottom: var(--space-3);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-control);
 }
 
-.inputs input,
-.inputs select {
+.form-fields input,
+.form-fields select {
   width: 100%;
-  border: 1px solid #dce5df;
-  background: #fbfcfb;
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-top: 7px;
-  color: #1b322a;
+  border: 1px solid var(--border-control);
+  background: var(--surface-control);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-top: var(--space-2);
+  color: var(--color-text-primary);
   font:
     600 15px "DM Sans",
     Arial,
@@ -57,148 +57,124 @@
   outline: none;
 }
 
-.inputs input:focus {
-  border-color: #87b847;
+.form-fields input:focus,
+.form-fields select:focus {
+  border-color: var(--color-interactive);
+}
+
+.form-fields input:focus-visible,
+.form-fields select:focus-visible {
+  outline: 3px solid var(--color-interactive);
+  outline-offset: 2px;
 }
 .two {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 13px;
+  gap: var(--space-3);
 }
 
 .add {
   border: 0;
   background: transparent;
-  color: #699334;
+  color: var(--color-interactive);
   font-weight: 600;
-  font-size: 12px;
-  padding: 12px 0;
+  font-size: var(--font-size-caption);
+  padding: var(--space-3) 0;
 }
 
 .extra-cost {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 120px 32px;
-  gap: 8px;
-  margin: 8px 0;
+  gap: var(--space-2);
+  margin: var(--space-2) 0;
 }
 .extra-cost input {
   margin: 0 !important;
-}
-.extra-cost span {
-  position: absolute;
-  right: 13px;
-  top: 12px;
-  color: #9aaa9f;
 }
 .remove-cost {
   width: 32px;
   min-height: 42px;
   border: 0;
   background: transparent;
-  color: #b36f5b;
-  font-size: 20px;
+  color: var(--color-danger);
+  font-size: var(--font-size-icon);
   line-height: 1;
   cursor: pointer;
 }
 .saving-check {
-  margin-top: 18px;
-  padding: 12px;
-  border-radius: 8px;
-  background: #fff5e9;
-  color: #9a6548;
+  margin-top: var(--space-5);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-warning);
+  color: var(--color-warning);
 }
 .saving-check.realistic {
-  background: #f0f7e9;
-  color: #5b8235;
+  background: var(--surface-positive);
+  color: var(--color-positive);
 }
 .saving-check b,
 .saving-check small {
   display: block;
 }
 .saving-check b {
-  font-size: 12px;
+  font-size: var(--font-size-caption);
 }
 .saving-check small {
-  font-size: 11px;
-  margin-top: 4px;
-  color: #819087;
+  font-size: var(--font-size-eyebrow);
+  margin-top: var(--space-1);
+  color: var(--color-text-muted);
 }
 .notice {
   position: fixed;
-  top: 20px;
-  right: 25px;
-  background: #173d34;
-  color: #fff;
-  border-radius: 8px;
-  padding: 12px 16px;
-  font-size: 12px;
+  top: var(--space-5);
+  right: var(--space-6);
+  background: var(--surface-action);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-caption);
   z-index: 5;
-  box-shadow: 0 5px 20px #173d3433;
-  cursor: pointer;
+  box-shadow: var(--shadow-notice);
 }
-.preferences-overlay {
+.dialog-overlay {
   position: fixed;
   inset: 0;
-  background: #173d3455;
+  background: var(--surface-scrim);
   display: grid;
   place-items: center;
   z-index: 4;
-  padding: clamp(12px, 4vw, 32px);
+  padding: clamp(var(--space-3), 4vw, var(--space-8));
   overflow-y: auto;
 }
-.preferences-panel {
+.dialog-panel {
   position: relative;
-  width: min(100%, 520px);
-  max-height: calc(100dvh - 24px);
+  width: min(100%, var(--dialog-max-width));
+  max-height: calc(100dvh - var(--space-6));
   overflow-y: auto;
-  background: #fff;
-  border-radius: 15px;
-  padding: clamp(20px, 4vw, 30px);
-  box-shadow: 0 18px 50px #173d3440;
+  background: var(--surface-raised);
+  border-radius: var(--radius-lg);
+  padding: clamp(var(--space-5), 4vw, var(--space-8));
+  box-shadow: var(--shadow-dialog);
 }
-.preferences-panel h2 {
-  font-size: 26px;
+.dialog-panel h2 {
+  font-size: var(--font-size-dialog-title);
 }
-.preferences-copy {
-  color: #819087;
-  font-size: 13px;
-  margin: 8px 0 24px;
+.dialog-copy {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-body-small);
+  margin: var(--space-2) 0 var(--space-6);
 }
-.preferences-panel label {
-  display: block;
-  color: #6b7d73;
-  font-size: 12px;
-  font-weight: 600;
-  margin: 17px 0;
-  position: relative;
-}
-.preferences-panel input {
-  width: 100%;
-  border: 1px solid #dce5df;
-  background: #fbfcfb;
-  border-radius: 8px;
-  padding: 12px 14px;
-  margin-top: 7px;
-  font:
-    600 15px "DM Sans",
-    Arial,
-    sans-serif;
-}
-.preferences-panel label > .numeric-field-suffix {
+.dialog-close {
   position: absolute;
-  right: 14px;
-  bottom: 13px;
-  color: #9aaa9f;
-}
-.close-preferences {
-  position: absolute;
-  right: 18px;
-  top: 15px;
+  right: var(--space-4);
+  top: var(--space-4);
   border: 0;
   background: transparent;
-  font-size: 24px;
-  color: #819087;
+  font-size: var(--font-size-icon-large);
+  color: var(--color-text-muted);
   cursor: pointer;
-  min-width: 44px;
-  min-height: 44px;
+  min-width: var(--touch-target);
+  min-height: var(--touch-target);
+  display: grid;
+  place-items: center;
 }

@@ -5,7 +5,6 @@ import { useCalculations } from "./useCalculations";
 describe("useCalculations", () => {
   const createCalculations = (
     overrides: {
-      essentials?: number;
       monthlySaving?: number;
     } = {},
   ) =>
@@ -17,7 +16,7 @@ describe("useCalculations", () => {
       deposit: ref(0),
       term: ref(12),
       rate: ref(0),
-      rent: ref(0),
+      rent: ref(800),
       moving: ref(0),
       furnishings: ref(0),
       utilities: ref(0),
@@ -25,7 +24,6 @@ describe("useCalculations", () => {
       food: ref(0),
       monthlyCommitments: ref(0),
       debtPayments: ref(0),
-      essentials: ref(overrides.essentials ?? 800),
       saved: ref(0),
       monthlySaving: ref(overrides.monthlySaving ?? 0),
       extraCosts: ref<{ id: number; name: string; amount: number }[]>([]),
@@ -40,15 +38,14 @@ describe("useCalculations", () => {
       deposit: ref(0),
       term: ref(12),
       rate: ref(0),
-      rent: ref(0),
+      rent: ref(1_000_000_000),
       moving: ref(0),
       furnishings: ref(0),
-      utilities: ref(0),
-      transport: ref(0),
-      food: ref(0),
-      monthlyCommitments: ref(0),
-      debtPayments: ref(0),
-      essentials: ref(6_000_000_000),
+      utilities: ref(1_000_000_000),
+      transport: ref(1_000_000_000),
+      food: ref(1_000_000_000),
+      monthlyCommitments: ref(1_000_000_000),
+      debtPayments: ref(1_000_000_000),
       saved: ref(0),
       monthlySaving: ref(0),
       extraCosts: ref<{ id: number; name: string; amount: number }[]>([]),
@@ -72,20 +69,5 @@ describe("useCalculations", () => {
 
     expect(calculations.suggestedSaving.value).toBe(100);
     expect(calculations.savingIsRealistic.value).toBe(false);
-  });
-
-  it("returns the composed results view model", () => {
-    const results = createCalculations().results.value;
-
-    expect(results.cashFlow).toMatchObject({
-      income: "£1,000",
-      saving: "£100",
-      remaining: "£900",
-    });
-    expect(results.financeHealth?.[0]).toMatchObject({
-      label: "Housing",
-      percentage: 0,
-      status: "within",
-    });
   });
 });

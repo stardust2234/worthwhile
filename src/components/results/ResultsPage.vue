@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
-import { FileDown, HelpCircle, X } from "lucide-vue-next";
-import { useDialogAccessibility } from "../../composables/useDialogAccessibility";
+import { ref } from "vue";
+import { FileDown, HelpCircle } from "lucide-vue-next";
 import type { FinancialResults } from "../../types/financial";
+import DialogShell from "../DialogShell.vue";
 import CashFlowBreakdown from "./CashFlowBreakdown.vue";
 import FinanceHealth from "./FinanceHealth.vue";
 defineProps<{
@@ -10,14 +10,6 @@ defineProps<{
 }>();
 const emit = defineEmits<{ (e: "back"): void }>();
 const help = ref<{ title: string; copy: string } | null>(null);
-const helpDialog = ref<HTMLElement | null>(null);
-useDialogAccessibility(
-  computed(() => help.value !== null),
-  helpDialog,
-  () => {
-    help.value = null;
-  },
-);
 const exportPdf = () => window.print();
 </script>
 <template>
@@ -147,28 +139,19 @@ const exportPdf = () => window.print();
         >
       </article>
     </div>
-    <div
-      v-if="help"
-      class="preferences-overlay"
-      role="dialog"
-      aria-modal="true"
-      :aria-label="help.title"
-      @click.self="help = null"
+    <DialogShell
+      :open="help !== null"
+      :aria-label="help?.title"
+      close-label="Close explainer"
+      panel-class="explainer-panel"
+      @close="help = null"
     >
-      <div ref="helpDialog" class="preferences-panel explainer-panel">
-        <button
-          class="close-preferences"
-          type="button"
-          aria-label="Close explainer"
-          @click="help = null"
-        >
-          <X :size="20" />
-        </button>
+      <template v-if="help">
         <p class="eyebrow">ABOUT THIS METRIC</p>
         <h2>{{ help.title }}</h2>
-        <p class="preferences-copy">{{ help.copy }}</p>
-      </div>
-    </div>
+        <p class="dialog-copy">{{ help.copy }}</p>
+      </template>
+    </DialogShell>
     <div class="results-detail-grid">
       <div class="cash-flow">
         <CashFlowBreakdown :cash-flow="results.cashFlow" />

@@ -41,6 +41,35 @@ describe("Results page integration", () => {
     expect(print).toHaveBeenCalledOnce();
     print.mockRestore();
   });
+
+  it("uses the shared accessible dialog shell for result explainers", async () => {
+    const wrapper = mount(ResultsPage, {
+      attachTo: document.body,
+      props: resultProps,
+    });
+    const trigger = wrapper.get('[aria-label="Explain Big Purchase"]');
+    (trigger.element as HTMLElement).focus();
+
+    await trigger.trigger("click");
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+
+    const dialog = wrapper.get('[role="dialog"]');
+    expect(dialog.attributes()).toMatchObject({
+      "aria-label": "Big Purchase",
+      "aria-modal": "true",
+    });
+    expect(document.activeElement).toBe(
+      wrapper.get('[aria-label="Close explainer"]').element,
+    );
+
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    await wrapper.vm.$nextTick();
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
+    expect(document.activeElement).toBe(trigger.element);
+    wrapper.unmount();
+  });
 });
 
 describe("dialog accessibility", () => {
@@ -138,13 +167,9 @@ describe("localStorage integration", () => {
       "Big purchase",
     );
 
-    const menuButton = wrapper.get(".menu-button");
-    (menuButton.element as HTMLElement).focus();
-    await menuButton.trigger("click");
-    await wrapper
-      .findAll(".menu-panel button")
-      .find((button) => button.text() === "Preferences")!
-      .trigger("click");
+    const preferencesButton = wrapper.get(".nav-preferences");
+    (preferencesButton.element as HTMLElement).focus();
+    await preferencesButton.trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
     expect(document.activeElement).toBe(
@@ -154,7 +179,7 @@ describe("localStorage integration", () => {
     document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
     await wrapper.vm.$nextTick();
     await wrapper.vm.$nextTick();
-    expect(document.activeElement).toBe(menuButton.element);
+    expect(document.activeElement).toBe(preferencesButton.element);
     wrapper.unmount();
   });
   it("persists a changed income value", async () => {
@@ -190,17 +215,13 @@ describe("localStorage integration", () => {
   });
   it("updates Safety net essentials from Preferences", async () => {
     const wrapper = mount(App);
-    await wrapper.find(".menu-button").trigger("click");
-    await wrapper
-      .findAll(".menu-panel button")
-      .find((button) => button.text() === "Preferences")!
-      .trigger("click");
+    await wrapper.find(".nav-preferences").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.find("#preference-rent").setValue("700");
     await wrapper.find("#preference-utilities").setValue("200");
     await wrapper.find("#preference-debt").setValue("100");
     await wrapper.find("#preference-commitments").setValue("50");
-    await wrapper.find(".preferences-panel .save").trigger("click");
+    await wrapper.find(".dialog-panel .save").trigger("click");
     await wrapper
       .findAll(".tabs button")
       .find((button) => button.text().includes("Safety net"))!
@@ -293,9 +314,8 @@ describe("localStorage integration", () => {
       JSON.stringify({ income: 5000 }),
     );
     const wrapper = mount(App);
-    await wrapper.find(".menu-button").trigger("click");
     await wrapper
-      .findAll(".menu-panel button")
+      .findAll(".top-nav button")
       .find((button) => button.text() === "Clear saved data")!
       .trigger("click");
     expect(localStorage.getItem("worthwhile-calculator-state")).toBe(null);
@@ -338,15 +358,11 @@ describe("localStorage integration", () => {
     const wrapper = mount(App);
     await wrapper.find("#monthly-income").setValue("1000");
     await wrapper.find("#purchase-price").setValue("0");
-    await wrapper.find(".menu-button").trigger("click");
-    await wrapper
-      .findAll(".menu-panel button")
-      .find((button) => button.text() === "Preferences")!
-      .trigger("click");
+    await wrapper.find(".nav-preferences").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.find("#preference-food").setValue("200");
     await wrapper.find("#preference-transport").setValue("100");
-    await wrapper.find(".preferences-panel .save").trigger("click");
+    await wrapper.find(".dialog-panel .save").trigger("click");
     await wrapper
       .findAll(".tabs button")
       .find((button) => button.text() === "Results")!
@@ -360,18 +376,14 @@ describe("localStorage integration", () => {
   });
   it("keeps moving verdict and Results status aligned", async () => {
     const wrapper = mount(App);
-    await wrapper.find(".menu-button").trigger("click");
-    await wrapper
-      .findAll(".menu-panel button")
-      .find((button) => button.text() === "Preferences")!
-      .trigger("click");
+    await wrapper.find(".nav-preferences").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.find("#preference-income").setValue("5000");
     await wrapper.find("#preference-rent").setValue("1000");
     await wrapper.find("#preference-utilities").setValue("200");
     await wrapper.find("#preference-transport").setValue("500");
     await wrapper.find("#preference-food").setValue("500");
-    await wrapper.find(".preferences-panel .save").trigger("click");
+    await wrapper.find(".dialog-panel .save").trigger("click");
     await wrapper
       .findAll(".tabs button")
       .find((button) => button.text().includes("Moving home"))!
@@ -393,15 +405,11 @@ describe("localStorage integration", () => {
   });
   it("warns when purchase debt is fractionally above the threshold", async () => {
     const wrapper = mount(App);
-    await wrapper.find(".menu-button").trigger("click");
-    await wrapper
-      .findAll(".menu-panel button")
-      .find((button) => button.text() === "Preferences")!
-      .trigger("click");
+    await wrapper.find(".nav-preferences").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.find("#preference-income").setValue("1000");
     await wrapper.find("#preference-debt").setValue("200.04");
-    await wrapper.find(".preferences-panel .save").trigger("click");
+    await wrapper.find(".dialog-panel .save").trigger("click");
 
     expect(wrapper.find(".result .salary").text()).toContain(
       "Debt repayments use 20%",
@@ -443,6 +451,10 @@ describe("localStorage integration", () => {
     expect(wrapper.find(".results-page").text()).toContain(
       "ESSENTIAL COST RATIO",
     );
+    const ratioCard = wrapper
+      .findAll(".results-cards article")
+      .find((card) => card.text().includes("ESSENTIAL COST RATIO"));
+    expect(ratioCard?.find("h3").text()).toBe("40%");
     wrapper.unmount();
   });
   it("shows purchase details and safety progress on Results", async () => {
@@ -477,14 +489,10 @@ describe("localStorage integration", () => {
   });
   it("does not apply safety saving suggestions to Purchase Finance Health", async () => {
     const wrapper = mount(App);
-    await wrapper.find(".menu-button").trigger("click");
-    await wrapper
-      .findAll(".menu-panel button")
-      .find((button) => button.text() === "Preferences")!
-      .trigger("click");
+    await wrapper.find(".nav-preferences").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.find("#preference-saving").setValue("0");
-    await wrapper.find(".preferences-panel .save").trigger("click");
+    await wrapper.find(".dialog-panel .save").trigger("click");
     await wrapper
       .findAll(".tabs button")
       .find((button) => button.text() === "Results")!
@@ -560,14 +568,10 @@ describe("localStorage integration", () => {
   });
   it("keeps an explicit zero cash saving pace consistent", async () => {
     const wrapper = mount(App);
-    await wrapper.find(".menu-button").trigger("click");
-    await wrapper
-      .findAll(".menu-panel button")
-      .find((button) => button.text() === "Preferences")!
-      .trigger("click");
+    await wrapper.find(".nav-preferences").trigger("click");
     await wrapper.vm.$nextTick();
     await wrapper.find("#preference-saving").setValue("0");
-    await wrapper.find(".preferences-panel .save").trigger("click");
+    await wrapper.find(".dialog-panel .save").trigger("click");
     await wrapper.find("#purchase-price").setValue("3000");
     await wrapper
       .findAll(".choice button")
