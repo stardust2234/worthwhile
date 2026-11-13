@@ -7,21 +7,9 @@ import NumericField from "./NumericField.vue";
 import PurchaseCalculator from "./calculators/PurchaseCalculator.vue";
 import MoveCalculator from "./calculators/MoveCalculator.vue";
 import SafetyCalculator from "./calculators/SafetyCalculator.vue";
-import type {
-  WorkspaceCommands,
-  WorkspaceState,
-} from "../composables/workspaceContract";
-import type { PlanMetrics } from "../domain/financialResults";
-import type { FinancialResults } from "../types/financial";
-import type { AffordabilityDisplayState } from "../viewModels/affordabilityDisplay";
+import type { WorkspaceProps } from "../composables/workspaceProps";
 
-const props = defineProps<{
-  state: WorkspaceState;
-  metrics: PlanMetrics;
-  affordabilityDisplay: AffordabilityDisplayState;
-  calculatedResults: FinancialResults;
-  commands: WorkspaceCommands;
-}>();
+const props = defineProps<WorkspaceProps>();
 const { state, metrics, affordabilityDisplay, calculatedResults, commands } =
   toRefs(props);
 </script>

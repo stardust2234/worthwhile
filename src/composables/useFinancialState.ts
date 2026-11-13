@@ -1,12 +1,19 @@
-import { ref } from "vue";
+import { ref, type Ref } from "vue";
 import type {
   AppView,
   CalculatorMode,
   ExtraCost,
+  FinancialPlanState,
   PurchaseType,
 } from "../types/plan";
 
-export function useFinancialState() {
+export type FinancialStateRefs = {
+  [Key in keyof FinancialPlanState]: Ref<FinancialPlanState[Key]>;
+};
+
+export function useFinancialState(): FinancialStateRefs & {
+  view: Ref<AppView>;
+} {
   return {
     mode: ref<CalculatorMode>("purchase"),
     view: ref<AppView>("calculators"),

@@ -1,13 +1,12 @@
-import type { ComputedRef } from "vue";
-import type { AffordabilityDisplayState } from "../viewModels/affordabilityDisplay";
-import type { PlanMetrics } from "../domain/financialResults";
-import type { FinancialResults } from "../types/financial";
 import type {
   AppView,
   CalculatorMode,
   ExtraCost,
   PurchaseType,
 } from "../types/plan";
+import type { FinancialResults } from "../types/financial";
+import type { PlanMetrics } from "../domain/financialResults";
+import type { AffordabilityDisplayState } from "../viewModels/affordabilityDisplay";
 
 export type WorkspaceState = {
   mode: CalculatorMode;
@@ -64,10 +63,10 @@ export type WorkspaceCommands = {
   formatCurrency(value: number): string;
 };
 
-export type WorkspaceController = {
+export type WorkspaceProps = {
   state: WorkspaceState;
-  metrics: ComputedRef<PlanMetrics>;
-  affordabilityDisplay: ComputedRef<AffordabilityDisplayState>;
-  calculatedResults: ComputedRef<FinancialResults>;
+  metrics: PlanMetrics;
+  affordabilityDisplay: AffordabilityDisplayState;
+  calculatedResults: FinancialResults;
   commands: WorkspaceCommands;
 };
