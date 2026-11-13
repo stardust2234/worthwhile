@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { toRefs } from "vue";
 import CalculatorTabs from "./CalculatorTabs.vue";
 import ResultsPage from "./results/ResultsPage.vue";
 import AffordabilityResult from "./results/AffordabilityResult.vue";
@@ -6,119 +7,97 @@ import NumericField from "./NumericField.vue";
 import PurchaseCalculator from "./calculators/PurchaseCalculator.vue";
 import MoveCalculator from "./calculators/MoveCalculator.vue";
 import SafetyCalculator from "./calculators/SafetyCalculator.vue";
-import type { WorkspaceController } from "../composables/workspaceContract";
+import type {
+  WorkspaceCommands,
+  WorkspaceState,
+} from "../composables/workspaceContract";
+import type { PlanMetrics } from "../domain/financialResults";
+import type { FinancialResults } from "../types/financial";
+import type { AffordabilityDisplayState } from "../viewModels/affordabilityDisplay";
 
-const props = defineProps<{ controller: WorkspaceController }>();
-const {
-  mode,
-  view,
-  purchaseType,
-  income,
-  price,
-  deposit,
-  term,
-  rate,
-  rent,
-  moving,
-  furnishings,
-  utilities,
-  essentials,
-  saved,
-  monthlySaving,
-  extraCosts,
-  affordabilityDisplay,
-  calculatedResults,
-  availableMonthly,
-  suggestedSaving,
-  suggestedSavingRate,
-  savingIsPossible,
-  savingIsRealistic,
-  fmt,
-  setIncome,
-  setPrice,
-  setDeposit,
-  setRate,
-  setTerm,
-  setPurchaseType,
-  setRent,
-  setMoving,
-  setFurnishings,
-  setUtilities,
-  setMonthlySaving,
-  setSaved,
-  addCost,
-  removeCost,
-  setExtraCostName,
-  setExtraCostAmount,
-  savePlan,
-  selectCalculator,
-} = props.controller;
+const props = defineProps<{
+  state: WorkspaceState;
+  metrics: PlanMetrics;
+  affordabilityDisplay: AffordabilityDisplayState;
+  calculatedResults: FinancialResults;
+  commands: WorkspaceCommands;
+}>();
+const { state, metrics, affordabilityDisplay, calculatedResults, commands } =
+  toRefs(props);
 </script>
 
 <template>
   <CalculatorTabs
-    :model-value="view === 'results' ? 'results' : mode"
-    @update:model-value="selectCalculator"
+    :model-value="state.view === 'results' ? 'results' : state.mode"
+    @update:model-value="commands.selectCalculator"
   />
   <div
     id="calculator-panel"
     role="tabpanel"
-    :aria-labelledby="`calculator-tab-${view === 'results' ? 'results' : mode}`"
+    :aria-labelledby="`calculator-tab-${state.view === 'results' ? 'results' : state.mode}`"
     tabindex="0"
   >
-    <template v-if="view === 'calculators'"
+    <template v-if="state.view === 'calculators'"
       ><div class="grid">
         <section class="card inputs form-fields">
           <NumericField
             id="monthly-income"
             label="Monthly take-home income"
-            :value="income"
+            :value="state.income"
             suffix="£"
-            @update:value="setIncome"
+            @update:value="commands.setIncome"
           /><PurchaseCalculator
-            v-if="mode === 'purchase'"
-            :purchase-type="purchaseType"
-            :price="price"
-            :deposit="deposit"
-            :term="term"
-            :rate="rate"
-            @update:price="setPrice"
-            @update:deposit="setDeposit"
-            @update:term="setTerm"
-            @update:rate="setRate"
-            @update:purchase-type="setPurchaseType"
+            v-if="state.mode === 'purchase'"
+            :purchase-type="state.purchaseType"
+            :price="state.price"
+            :deposit="state.deposit"
+            :term="state.term"
+            :rate="state.rate"
+            @update:price="commands.setPrice"
+            @update:deposit="commands.setDeposit"
+            @update:term="commands.setTerm"
+            @update:rate="commands.setRate"
+            @update:purchase-type="commands.setPurchaseType"
           /><MoveCalculator
-            v-else-if="mode === 'move'"
-            :rent="rent"
-            :moving="moving"
-            :furnishings="furnishings"
-            :utilities="utilities"
-            @update:rent="setRent"
-            @update:moving="setMoving"
-            @update:furnishings="setFurnishings"
-            @update:utilities="setUtilities"
+            v-else-if="state.mode === 'move'"
+            :rent="state.rent"
+            :moving="state.moving"
+            :furnishings="state.furnishings"
+            :utilities="state.utilities"
+            @update:rent="commands.setRent"
+            @update:moving="commands.setMoving"
+            @update:furnishings="commands.setFurnishings"
+            @update:utilities="commands.setUtilities"
           /><SafetyCalculator
             v-else
-            :essentials="essentials"
-            :saved="saved"
-            :monthly-saving="monthlySaving"
-            @update:saved="setSaved"
-            @update:monthly-saving="setMonthlySaving"
-            :available-monthly="availableMonthly"
-            :suggested-saving="suggestedSaving"
-            :suggested-saving-rate="suggestedSavingRate"
-            :saving-is-possible="savingIsPossible"
-            :saving-is-realistic="savingIsRealistic"
-            :format-currency="fmt"
-          /><button v-if="mode !== 'safety'" class="add" @click="addCost">
+            :essentials="metrics.essentials"
+            :saved="state.saved"
+            :monthly-saving="state.monthlySaving"
+            @update:saved="commands.setSaved"
+            @update:monthly-saving="commands.setMonthlySaving"
+            :available-monthly="metrics.availableMonthly"
+            :suggested-saving="metrics.suggestedSaving"
+            :suggested-saving-rate="metrics.suggestedSavingRate"
+            :saving-is-possible="metrics.savingIsPossible"
+            :saving-is-realistic="metrics.savingIsRealistic"
+            :format-currency="commands.formatCurrency"
+          /><button
+            v-if="state.mode !== 'safety'"
+            class="add"
+            @click="commands.addCost"
+          >
             ＋ Add another cost
           </button>
-          <div v-for="cost in extraCosts" :key="cost.id" class="extra-cost">
+          <div
+            v-for="cost in state.extraCosts"
+            :key="cost.id"
+            class="extra-cost"
+          >
             <input
               :value="cost.name"
               :aria-label="`${cost.name} name`"
               @input="
-                setExtraCostName(
+                commands.setExtraCostName(
                   cost.id,
                   ($event.target as HTMLInputElement).value,
                 )
@@ -129,7 +108,7 @@ const {
               min="0"
               aria-label="Monthly cost amount"
               @input="
-                setExtraCostAmount(
+                commands.setExtraCostAmount(
                   cost.id,
                   Number(($event.target as HTMLInputElement).value),
                 )
@@ -137,7 +116,7 @@ const {
             /><button
               class="remove-cost"
               type="button"
-              @click="removeCost(cost.id)"
+              @click="commands.removeCost(cost.id)"
               :aria-label="`Remove ${cost.name}`"
             >
               ×
@@ -156,12 +135,12 @@ const {
           :rule-copy="affordabilityDisplay.ruleCopy"
           :warning-title="affordabilityDisplay.warningTitle"
           :warning="affordabilityDisplay.warning"
-          @save="savePlan"
+          @save="commands.savePlan"
         /></div></template
     ><ResultsPage
       v-else
       :results="calculatedResults"
-      @back="selectCalculator(mode)"
+      @back="commands.selectCalculator(state.mode)"
     />
   </div>
 </template>

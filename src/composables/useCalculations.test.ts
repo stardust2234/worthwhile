@@ -51,23 +51,23 @@ describe("useCalculations", () => {
       extraCosts: ref<{ id: number; name: string; amount: number }[]>([]),
     });
 
-    expect(calculations.disposableMargin.value).toBe(-5_000_000_000);
+    expect(calculations.metrics.value.disposableMargin).toBe(-5_000_000_000);
   });
 
   it("shares saving decisions with the safety calculator", () => {
     const calculations = createCalculations();
 
-    expect(calculations.availableMonthly.value).toBe(200);
-    expect(calculations.suggestedSaving.value).toBe(100);
-    expect(calculations.suggestedSavingRate.value).toBe(10);
-    expect(calculations.savingIsPossible.value).toBe(true);
-    expect(calculations.savingIsRealistic.value).toBe(true);
+    expect(calculations.metrics.value.availableMonthly).toBe(200);
+    expect(calculations.metrics.value.suggestedSaving).toBe(100);
+    expect(calculations.metrics.value.suggestedSavingRate).toBe(10);
+    expect(calculations.metrics.value.savingIsPossible).toBe(true);
+    expect(calculations.metrics.value.savingIsRealistic).toBe(true);
   });
 
   it("marks an explicit saving pace above the available margin unrealistic", () => {
     const calculations = createCalculations({ monthlySaving: 201 });
 
-    expect(calculations.suggestedSaving.value).toBe(100);
-    expect(calculations.savingIsRealistic.value).toBe(false);
+    expect(calculations.metrics.value.suggestedSaving).toBe(100);
+    expect(calculations.metrics.value.savingIsRealistic).toBe(false);
   });
 });

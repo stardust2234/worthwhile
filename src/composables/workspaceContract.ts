@@ -1,5 +1,6 @@
-import type { ComputedRef, Ref } from "vue";
+import type { ComputedRef } from "vue";
 import type { AffordabilityDisplayState } from "../viewModels/affordabilityDisplay";
+import type { PlanMetrics } from "../domain/financialResults";
 import type { FinancialResults } from "../types/financial";
 import type {
   AppView,
@@ -8,34 +9,31 @@ import type {
   PurchaseType,
 } from "../types/plan";
 
-type WorkspaceDto = {
-  mode: Ref<CalculatorMode>;
-  view: Ref<AppView>;
-  purchaseType: Ref<PurchaseType>;
-  income: Ref<number>;
-  price: Ref<number>;
-  deposit: Ref<number>;
-  term: Ref<number>;
-  rate: Ref<number>;
-  rent: Ref<number>;
-  moving: Ref<number>;
-  furnishings: Ref<number>;
-  utilities: Ref<number>;
-  essentials: ComputedRef<number>;
-  saved: Ref<number>;
-  monthlySaving: Ref<number>;
-  extraCosts: Ref<ExtraCost[]>;
-  affordabilityDisplay: ComputedRef<AffordabilityDisplayState>;
-  calculatedResults: ComputedRef<FinancialResults>;
-  availableMonthly: ComputedRef<number>;
-  suggestedSaving: ComputedRef<number>;
-  suggestedSavingRate: ComputedRef<number>;
-  savingIsPossible: ComputedRef<boolean>;
-  savingIsRealistic: ComputedRef<boolean>;
-  fmt: (value: number) => string;
+export type WorkspaceState = {
+  mode: CalculatorMode;
+  view: AppView;
+  purchaseType: PurchaseType;
+  income: number;
+  price: number;
+  deposit: number;
+  term: number;
+  rate: number;
+  rent: number;
+  moving: number;
+  furnishings: number;
+  utilities: number;
+  transport: number;
+  food: number;
+  monthlyCommitments: number;
+  debtPayments: number;
+  saved: number;
+  monthlySaving: number;
+  extraCosts: ExtraCost[];
+  preferencesOpen: boolean;
+  notice: string;
 };
 
-type WorkspaceCommands = {
+export type WorkspaceCommands = {
   setIncome(value: number): void;
   setPrice(value: number): void;
   setDeposit(value: number): void;
@@ -58,6 +56,18 @@ type WorkspaceCommands = {
   setExtraCostAmount(id: number, value: number): void;
   savePlan(): void;
   selectCalculator(next: CalculatorMode | "results"): void;
+  openPreferences(): void;
+  closePreferences(): void;
+  savePreferences(): void;
+  clearSavedData(): void;
+  showNotice(message: string): void;
+  formatCurrency(value: number): string;
 };
 
-export type WorkspaceController = WorkspaceDto & WorkspaceCommands;
+export type WorkspaceController = {
+  state: WorkspaceState;
+  metrics: ComputedRef<PlanMetrics>;
+  affordabilityDisplay: ComputedRef<AffordabilityDisplayState>;
+  calculatedResults: ComputedRef<FinancialResults>;
+  commands: WorkspaceCommands;
+};

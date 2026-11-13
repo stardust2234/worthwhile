@@ -2,6 +2,7 @@ export type CalculatorMode = "purchase" | "move" | "safety";
 export type PurchaseType = "finance" | "cash";
 export type AppView = "calculators" | "results";
 export type ExtraCost = { id: number; name: string; amount: number };
+export const PLAN_SCHEMA_VERSION = 1 as const;
 
 export type FinancialPlanState = {
   mode: CalculatorMode;
@@ -26,10 +27,12 @@ export type FinancialPlanState = {
 
 export type PlanStorageRecord = FinancialPlanState & {
   view: AppView;
+  schemaVersion: typeof PLAN_SCHEMA_VERSION;
 };
 
 export type PartialPlanStorageRecord = Partial<FinancialPlanState> & {
   view?: AppView;
+  schemaVersion?: number;
 };
 
 export interface PlanPersistencePort {

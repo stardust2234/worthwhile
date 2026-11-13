@@ -1,7 +1,7 @@
 import { computed, type Ref } from "vue";
 import {
   calculateFinancialPlan,
-  type FinancialCalculationResult,
+  type PlanMetrics,
 } from "../domain/financialResults";
 import type { FinancialPlanState } from "../types/plan";
 
@@ -10,7 +10,7 @@ type ReactiveFinancialPlanState = {
 };
 
 export function useCalculations(state: ReactiveFinancialPlanState) {
-  const calculation = computed<FinancialCalculationResult>(() =>
+  const metrics = computed<PlanMetrics>(() =>
     calculateFinancialPlan({
       mode: state.mode.value,
       purchaseType: state.purchaseType.value,
@@ -33,47 +33,5 @@ export function useCalculations(state: ReactiveFinancialPlanState) {
     }),
   );
 
-  const project = <Key extends keyof FinancialCalculationResult>(key: Key) =>
-    computed(() => calculation.value[key]);
-
-  return {
-    calculation,
-    housingRatio: project("housingRatio"),
-    comfortRatio: project("comfortRatio"),
-    housingCost: project("housingCost"),
-    essentials: project("essentials"),
-    affordabilityVerdict: project("affordabilityVerdict"),
-    debtRepaymentAboveGuideline: project("debtRepaymentAboveGuideline"),
-    rentAboveComfortRule: project("rentAboveComfortRule"),
-    suggestedHousingMaximum: project("suggestedHousingMaximum"),
-    minimumIncomeForRent: project("minimumIncomeForRent"),
-    monthlyPayment: project("monthlyPayment"),
-    interestCost: project("interestCost"),
-    fullPurchasePrice: project("fullPurchasePrice"),
-    moveTotal: project("moveTotal"),
-    emergencyTarget: project("emergencyTarget"),
-    cashAvailable: project("cashAvailable"),
-    extraMonthlyCosts: project("extraMonthlyCosts"),
-    monthlyHousing: project("monthlyHousing"),
-    plannedMonthlySaving: project("plannedMonthlySaving"),
-    availableMonthly: project("availableMonthly"),
-    disposableMargin: project("disposableMargin"),
-    disposableMarginPercentage: computed(
-      () => calculation.value.disposableMarginRatio,
-    ),
-    essentialCostRatio: project("essentialCostRatio"),
-    essentialCostPosition: project("essentialCostPosition"),
-    suggestedSaving: project("suggestedSaving"),
-    suggestedSavingRate: project("suggestedSavingRate"),
-    effectiveMonthlySaving: project("effectiveMonthlySaving"),
-    savingIsPossible: project("savingIsPossible"),
-    savingIsRealistic: project("savingIsRealistic"),
-    cashPurchaseMonths: project("cashPurchaseMonths"),
-    cashAmountStillNeeded: project("cashAmountStillNeeded"),
-    emergencyGap: project("emergencyGap"),
-    emergencyMonths: project("emergencyMonths"),
-    ratio: project("ratio"),
-    debtRepaymentRatio: project("debtRepaymentRatio"),
-    score: project("score"),
-  };
+  return { metrics };
 }
