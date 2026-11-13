@@ -2,13 +2,13 @@ import { describe, expect, it } from "vitest";
 import {
   deserializePlanRecord,
   migratePlanRecord,
-  toPlanStorageRecord,
-} from "./planPersistenceRecord";
+  serializePlanRecord,
+} from "./planPersistenceCodec";
 import { PLAN_SCHEMA_VERSION } from "../types/plan";
 
-describe("plan persistence records", () => {
+describe("plan persistence codec", () => {
   it("writes the current schema version", () => {
-    const record = toPlanStorageRecord(
+    const record = serializePlanRecord(
       {
         mode: "purchase",
         purchaseType: "finance",

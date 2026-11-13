@@ -1,7 +1,7 @@
 import {
   deserializePlanRecord,
   migratePlanRecord,
-} from "./planPersistenceRecord";
+} from "./planPersistenceCodec";
 import type { PlanPersistencePort } from "../types/plan";
 
 export const createLocalStoragePersistence = (

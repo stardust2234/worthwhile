@@ -1,75 +1,36 @@
-import { computed, reactive, ref, type Ref } from "vue";
+import { computed, reactive } from "vue";
 import { useFinancialState } from "./useFinancialState";
 import { useCalculations } from "./useCalculations";
 import { usePersistence } from "./usePersistence";
-import {
-  sanitizeNumber,
-  sanitizeRate,
-  sanitizeTermMonths,
-} from "../calculations";
+import { usePlanCommands } from "./usePlanCommands";
+import { usePlanNotifications } from "./usePlanNotifications";
+import { usePreferences } from "./usePreferences";
 import { buildAffordabilityDisplayState } from "../viewModels/affordabilityDisplay";
-import { buildFinancialResults } from "../viewModels/financialResults";
-import { formatCurrency } from "../viewModels/financialResults";
-import type {
-  CalculatorMode,
-  PlanPersistencePort,
-  PurchaseType,
-} from "../types/plan";
-import type { WorkspaceController } from "./workspaceContract";
+import {
+  buildFinancialResults,
+  formatCurrency,
+} from "../viewModels/financialResults";
+import type { PlanPersistencePort } from "../types/plan";
+import type { AppController } from "./appControllerContract";
 
 export function useAppController(
   persistencePort: PlanPersistencePort,
-): WorkspaceController {
-  const {
-    mode,
+): AppController {
+  const { view, ...stateRefs } = useFinancialState();
+  const { metrics } = useCalculations(stateRefs);
+  const notifications = usePlanNotifications();
+  const persistence = usePersistence(
+    persistencePort,
+    stateRefs,
     view,
-    purchaseType,
-    income,
-    price,
-    deposit,
-    term,
-    rate,
-    rent,
-    moving,
-    furnishings,
-    utilities,
-    transport,
-    food,
-    monthlyCommitments,
-    debtPayments,
-    saved,
-    monthlySaving,
-    extraCosts,
-  } = useFinancialState();
-  const preferencesOpen = ref(false);
-  const notice = ref("");
-
-  const calculations = useCalculations({
-    mode,
-    purchaseType,
-    income,
-    price,
-    deposit,
-    term,
-    rate,
-    rent,
-    moving,
-    furnishings,
-    utilities,
-    transport,
-    food,
-    monthlyCommitments,
-    debtPayments,
-    saved,
-    monthlySaving,
-    extraCosts,
-  });
-  const { metrics } = calculations;
-  const fmt = formatCurrency;
+    notifications.showNotice,
+  );
+  const planCommands = usePlanCommands(stateRefs, view, persistence);
+  const preferences = usePreferences(notifications.showNotice);
   const affordabilityDisplay = computed(() =>
     buildAffordabilityDisplayState({
-      mode: mode.value,
-      purchaseType: purchaseType.value,
+      mode: stateRefs.mode.value,
+      purchaseType: stateRefs.purchaseType.value,
       score: metrics.value.score,
       emergencyTarget: metrics.value.emergencyTarget,
       emergencyGap: metrics.value.emergencyGap,
@@ -91,128 +52,20 @@ export function useAppController(
       debtRepaymentRatio: metrics.value.debtRepaymentRatio,
       cashAvailable: metrics.value.cashAvailable,
       interestCost: metrics.value.interestCost,
-      rent: rent.value,
-      income: income.value,
+      rent: stateRefs.rent.value,
+      income: stateRefs.income.value,
       comfortRatio: metrics.value.comfortRatio,
-      formatCurrency: fmt,
+      formatCurrency,
     }),
   );
   const calculatedResults = computed(() =>
-    buildFinancialResults(metrics.value, fmt),
+    buildFinancialResults(metrics.value, formatCurrency),
   );
-
-  const showNotice = (message: string) => {
-    notice.value = message;
-    setTimeout(() => (notice.value = ""), 4000);
-  };
-  const numericSetter = (target: Ref<number>) => (value: number) => {
-    target.value = sanitizeNumber(value);
-  };
-  const setIncome = numericSetter(income);
-  const setPrice = numericSetter(price);
-  const setDeposit = numericSetter(deposit);
-  const setRate = (value: number) => {
-    rate.value = sanitizeRate(value);
-  };
-  const setPurchaseType = (value: PurchaseType) => {
-    purchaseType.value = value;
-  };
-  const setRent = numericSetter(rent);
-  const setMoving = numericSetter(moving);
-  const setFurnishings = numericSetter(furnishings);
-  const setUtilities = numericSetter(utilities);
-  const setTransport = numericSetter(transport);
-  const setFood = numericSetter(food);
-  const setDebtPayments = numericSetter(debtPayments);
-  const setMonthlySaving = numericSetter(monthlySaving);
-  const setMonthlyCommitments = numericSetter(monthlyCommitments);
-  const setSaved = numericSetter(saved);
-  const setTerm = (value: number) => {
-    term.value = sanitizeTermMonths(value);
-  };
-  const persistence = usePersistence(
-    persistencePort,
-    {
-      mode,
-      purchaseType,
-      price,
-      deposit,
-      term,
-      rate,
-      income,
-      rent,
-      utilities,
-      transport,
-      food,
-      monthlyCommitments,
-      debtPayments,
-      saved,
-      monthlySaving,
-      moving,
-      furnishings,
-      extraCosts,
-    },
-    view,
-    showNotice,
-  );
-  const addCost = () =>
-    extraCosts.value.push({
-      id: Date.now(),
-      name: "New monthly cost",
-      amount: 0,
-    });
-  const removeCost = (id: number) =>
-    (extraCosts.value = extraCosts.value.filter((cost) => cost.id !== id));
-  const setExtraCostAmount = (id: number, value: number) => {
-    const cost = extraCosts.value.find((item) => item.id === id);
-    if (cost) cost.amount = sanitizeNumber(value);
-  };
-  const setExtraCostName = (id: number, value: string) => {
-    const cost = extraCosts.value.find((item) => item.id === id);
-    if (cost) cost.name = value;
-  };
-  const savePlan = () => persistence.save();
-  const clearSavedData = () => persistence.clear();
-  const closePreferences = () => {
-    preferencesOpen.value = false;
-  };
-  const savePreferences = () => {
-    closePreferences();
-    showNotice("Preferences saved on this device.");
-  };
-  const openPreferences = () => {
-    preferencesOpen.value = true;
-  };
-  const selectCalculator = (next: CalculatorMode | "results") => {
-    if (next === "results") {
-      view.value = "results";
-      return;
-    }
-    mode.value = next;
-    view.value = "calculators";
-  };
   const state = reactive({
-    mode,
+    ...stateRefs,
     view,
-    purchaseType,
-    income,
-    price,
-    deposit,
-    term,
-    rate,
-    rent,
-    moving,
-    furnishings,
-    utilities,
-    transport,
-    food,
-    monthlyCommitments,
-    debtPayments,
-    saved,
-    monthlySaving,
-    extraCosts,
-    preferencesOpen,
-    notice,
+    preferencesOpen: preferences.preferencesOpen,
+    notice: notifications.notice,
   });
 
   return {
@@ -221,34 +74,10 @@ export function useAppController(
     affordabilityDisplay,
     calculatedResults,
     commands: {
-      setIncome,
-      setPrice,
-      setDeposit,
-      setRate,
-      setTerm,
-      setPurchaseType,
-      setRent,
-      setMoving,
-      setFurnishings,
-      setUtilities,
-      setTransport,
-      setFood,
-      setDebtPayments,
-      setMonthlySaving,
-      setMonthlyCommitments,
-      setSaved,
-      addCost,
-      removeCost,
-      setExtraCostName,
-      setExtraCostAmount,
-      savePlan,
-      selectCalculator,
-      openPreferences,
-      closePreferences,
-      savePreferences,
-      clearSavedData,
-      showNotice,
-      formatCurrency: fmt,
+      ...planCommands,
+      ...preferences,
+      ...notifications,
+      formatCurrency,
     },
   };
 }
