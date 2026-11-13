@@ -4,45 +4,23 @@ import CalculatorWorkspace from "./components/CalculatorWorkspace.vue";
 import PreferencesModal from "./components/PreferencesModal.vue";
 import { ShieldCheck } from "lucide-vue-next";
 import { useAppController } from "./composables/useAppController";
-import { createLocalStoragePersistence } from "./composables/usePersistence";
+import { createLocalStoragePersistence } from "./composables/localStoragePersistence";
 
 const app = useAppController(
   createLocalStoragePersistence("worthwhile-calculator-state"),
 );
-const {
-  preferencesOpen,
-  income,
-  rent,
-  utilities,
-  transport,
-  food,
-  debtPayments,
-  monthlySaving,
-  monthlyCommitments,
-  saved,
-  notice,
-  setIncome,
-  setRent,
-  setUtilities,
-  setTransport,
-  setFood,
-  setDebtPayments,
-  setMonthlySaving,
-  setMonthlyCommitments,
-  setSaved,
-  closePreferences,
-  savePreferences,
-} = app;
+const { state, metrics, affordabilityDisplay, calculatedResults, commands } =
+  app;
 </script>
 
 <template>
   <div class="shell">
     <main>
       <AppNavigation
-        :preferences-open="preferencesOpen"
-        @open-preferences="preferencesOpen = true"
-        @show-notice="app.showNotice"
-        @clear-saved-data="app.clearSavedData"
+        :preferences-open="state.preferencesOpen"
+        @open-preferences="commands.openPreferences"
+        @show-notice="commands.showNotice"
+        @clear-saved-data="commands.clearSavedData"
       />
       <header>
         <div>
@@ -54,38 +32,44 @@ const {
         </div>
       </header>
       <PreferencesModal
-        :open="preferencesOpen"
-        :income="income"
-        :rent="rent"
-        :utilities="utilities"
-        :transport="transport"
-        :food="food"
-        :debt-payments="debtPayments"
-        :monthly-saving="monthlySaving"
-        :monthly-commitments="monthlyCommitments"
-        :saved="saved"
-        @close="closePreferences"
-        @save="savePreferences"
-        @update:income="setIncome"
-        @update:rent="setRent"
-        @update:utilities="setUtilities"
-        @update:transport="setTransport"
-        @update:food="setFood"
-        @update:debt-payments="setDebtPayments"
-        @update:monthly-saving="setMonthlySaving"
-        @update:monthly-commitments="setMonthlyCommitments"
-        @update:saved="setSaved"
+        :open="state.preferencesOpen"
+        :income="state.income"
+        :rent="state.rent"
+        :utilities="state.utilities"
+        :transport="state.transport"
+        :food="state.food"
+        :debt-payments="state.debtPayments"
+        :monthly-saving="state.monthlySaving"
+        :monthly-commitments="state.monthlyCommitments"
+        :saved="state.saved"
+        @close="commands.closePreferences"
+        @save="commands.savePreferences"
+        @update:income="commands.setIncome"
+        @update:rent="commands.setRent"
+        @update:utilities="commands.setUtilities"
+        @update:transport="commands.setTransport"
+        @update:food="commands.setFood"
+        @update:debt-payments="commands.setDebtPayments"
+        @update:monthly-saving="commands.setMonthlySaving"
+        @update:monthly-commitments="commands.setMonthlyCommitments"
+        @update:saved="commands.setSaved"
       />
       <div
-        v-if="notice"
+        v-if="state.notice"
         class="notice"
         role="status"
         aria-live="polite"
         aria-atomic="true"
       >
-        {{ notice }}
+        {{ state.notice }}
       </div>
-      <CalculatorWorkspace :controller="app" />
+      <CalculatorWorkspace
+        :state="state"
+        :metrics="metrics"
+        :affordability-display="affordabilityDisplay"
+        :calculated-results="calculatedResults"
+        :commands="commands"
+      />
       <footer>
         <span class="privacy-note"
           ><ShieldCheck :size="14" /> Privacy: your figures are stored only in

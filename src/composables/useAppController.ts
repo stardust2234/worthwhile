@@ -1,4 +1,4 @@
-import { computed, ref, type Ref } from "vue";
+import { computed, reactive, ref, type Ref } from "vue";
 import { useFinancialState } from "./useFinancialState";
 import { useCalculations } from "./useCalculations";
 import { usePersistence } from "./usePersistence";
@@ -19,18 +19,7 @@ import type { WorkspaceController } from "./workspaceContract";
 
 export function useAppController(
   persistencePort: PlanPersistencePort,
-): WorkspaceController & {
-  preferencesOpen: Ref<boolean>;
-  notice: Ref<string>;
-  showNotice(message: string): void;
-  clearSavedData(): void;
-  closePreferences(): void;
-  savePreferences(): void;
-  transport: Ref<number>;
-  food: Ref<number>;
-  debtPayments: Ref<number>;
-  monthlyCommitments: Ref<number>;
-} {
+): WorkspaceController {
   const {
     mode,
     view,
@@ -75,70 +64,41 @@ export function useAppController(
     monthlySaving,
     extraCosts,
   });
-  const {
-    housingRatio,
-    comfortRatio,
-    affordabilityVerdict,
-    debtRepaymentAboveGuideline,
-    rentAboveComfortRule,
-    suggestedHousingMaximum,
-    minimumIncomeForRent,
-    housingCost,
-    monthlyPayment,
-    interestCost,
-    fullPurchasePrice,
-    moveTotal,
-    emergencyTarget,
-    cashAvailable,
-    availableMonthly,
-    suggestedSaving,
-    suggestedSavingRate,
-    savingIsPossible,
-    savingIsRealistic,
-    cashPurchaseMonths,
-    cashAmountStillNeeded,
-    emergencyGap,
-    emergencyMonths,
-    effectiveMonthlySaving,
-    ratio,
-    debtRepaymentRatio,
-    score,
-    calculation,
-  } = calculations;
+  const { metrics } = calculations;
   const fmt = formatCurrency;
   const affordabilityDisplay = computed(() =>
     buildAffordabilityDisplayState({
       mode: mode.value,
       purchaseType: purchaseType.value,
-      score: score.value,
-      emergencyTarget: emergencyTarget.value,
-      emergencyGap: emergencyGap.value,
-      emergencyMonths: emergencyMonths.value,
-      effectiveMonthlySaving: effectiveMonthlySaving.value,
-      fullPurchasePrice: fullPurchasePrice.value,
-      cashAmountStillNeeded: cashAmountStillNeeded.value,
-      cashPurchaseMonths: cashPurchaseMonths.value,
-      moveTotal: moveTotal.value,
-      housingCost: housingCost.value,
-      housingRatio: housingRatio.value,
-      affordabilityVerdict: affordabilityVerdict.value,
-      debtRepaymentAboveGuideline: debtRepaymentAboveGuideline.value,
-      rentAboveComfortRule: rentAboveComfortRule.value,
-      suggestedHousingMaximum: suggestedHousingMaximum.value,
-      minimumIncomeForRent: minimumIncomeForRent.value,
-      ratio: ratio.value,
-      monthlyPayment: monthlyPayment.value,
-      debtRepaymentRatio: debtRepaymentRatio.value,
-      cashAvailable: cashAvailable.value,
-      interestCost: interestCost.value,
+      score: metrics.value.score,
+      emergencyTarget: metrics.value.emergencyTarget,
+      emergencyGap: metrics.value.emergencyGap,
+      emergencyMonths: metrics.value.emergencyMonths,
+      effectiveMonthlySaving: metrics.value.effectiveMonthlySaving,
+      fullPurchasePrice: metrics.value.fullPurchasePrice,
+      cashAmountStillNeeded: metrics.value.cashAmountStillNeeded,
+      cashPurchaseMonths: metrics.value.cashPurchaseMonths,
+      moveTotal: metrics.value.moveTotal,
+      housingCost: metrics.value.housingCost,
+      housingRatio: metrics.value.housingRatio,
+      affordabilityVerdict: metrics.value.affordabilityVerdict,
+      debtRepaymentAboveGuideline: metrics.value.debtRepaymentAboveGuideline,
+      rentAboveComfortRule: metrics.value.rentAboveComfortRule,
+      suggestedHousingMaximum: metrics.value.suggestedHousingMaximum,
+      minimumIncomeForRent: metrics.value.minimumIncomeForRent,
+      ratio: metrics.value.ratio,
+      monthlyPayment: metrics.value.monthlyPayment,
+      debtRepaymentRatio: metrics.value.debtRepaymentRatio,
+      cashAvailable: metrics.value.cashAvailable,
+      interestCost: metrics.value.interestCost,
       rent: rent.value,
       income: income.value,
-      comfortRatio: comfortRatio.value,
+      comfortRatio: metrics.value.comfortRatio,
       formatCurrency: fmt,
     }),
   );
   const calculatedResults = computed(() =>
-    buildFinancialResults(calculation.value, fmt),
+    buildFinancialResults(metrics.value, fmt),
   );
 
   const showNotice = (message: string) => {
@@ -220,6 +180,9 @@ export function useAppController(
     closePreferences();
     showNotice("Preferences saved on this device.");
   };
+  const openPreferences = () => {
+    preferencesOpen.value = true;
+  };
   const selectCalculator = (next: CalculatorMode | "results") => {
     if (next === "results") {
       view.value = "results";
@@ -228,8 +191,7 @@ export function useAppController(
     mode.value = next;
     view.value = "calculators";
   };
-
-  return {
+  const state = reactive({
     mode,
     view,
     purchaseType,
@@ -246,45 +208,47 @@ export function useAppController(
     food,
     monthlyCommitments,
     debtPayments,
-    essentials: calculations.essentials,
     saved,
     monthlySaving,
     extraCosts,
     preferencesOpen,
     notice,
+  });
+
+  return {
+    state,
+    metrics,
     affordabilityDisplay,
     calculatedResults,
-    availableMonthly,
-    suggestedSaving,
-    suggestedSavingRate,
-    savingIsPossible,
-    savingIsRealistic,
-    fmt,
-    setIncome,
-    setPrice,
-    setDeposit,
-    setRate,
-    setTerm,
-    setPurchaseType,
-    setRent,
-    setMoving,
-    setFurnishings,
-    setUtilities,
-    setTransport,
-    setFood,
-    setDebtPayments,
-    setMonthlySaving,
-    setMonthlyCommitments,
-    setSaved,
-    addCost,
-    removeCost,
-    setExtraCostName,
-    setExtraCostAmount,
-    savePlan,
-    clearSavedData,
-    showNotice,
-    closePreferences,
-    savePreferences,
-    selectCalculator,
+    commands: {
+      setIncome,
+      setPrice,
+      setDeposit,
+      setRate,
+      setTerm,
+      setPurchaseType,
+      setRent,
+      setMoving,
+      setFurnishings,
+      setUtilities,
+      setTransport,
+      setFood,
+      setDebtPayments,
+      setMonthlySaving,
+      setMonthlyCommitments,
+      setSaved,
+      addCost,
+      removeCost,
+      setExtraCostName,
+      setExtraCostAmount,
+      savePlan,
+      selectCalculator,
+      openPreferences,
+      closePreferences,
+      savePreferences,
+      clearSavedData,
+      showNotice,
+      formatCurrency: fmt,
+    },
   };
 }

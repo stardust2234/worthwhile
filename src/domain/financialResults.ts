@@ -77,7 +77,7 @@ export type FinancialResultData = {
   financeHealth: FinanceHealthData[];
 };
 
-export type FinancialCalculationResult = FinancialResultData & {
+export type PlanMetrics = FinancialResultData & {
   essentials: number;
   affordabilityVerdict: AffordabilityVerdict;
   debtRepaymentAboveGuideline: boolean;
@@ -122,7 +122,7 @@ const evaluateMetric = (
 
 export const calculateFinancialPlan = (
   state: FinancialPlanState,
-): FinancialCalculationResult => {
+): PlanMetrics => {
   const extraMonthlyCosts = state.extraCosts.reduce(
     (sum, cost) => sum + sanitizeNumber(cost.amount),
     0,
